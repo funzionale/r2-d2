@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="http://www.thisisitstores.co.uk/media/catalog/product/cache/1/image/1500x/9df78eab33525d08d6e5fb8d27136e95/4/9/499040_1_1.jpg" width="120"/>
+  <img src="https://user-images.githubusercontent.com/11808903/30980594-4ac30728-a48a-11e7-915b-552976bf62fd.jpg" width="200"/>
 </p>
 
 <h1 align="center">R2-D2</h1>
