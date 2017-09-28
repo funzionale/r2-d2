@@ -1,0 +1,1 @@
+export { generateRandomGrid } from './generate';

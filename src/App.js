@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import { generateRandomGrid } from './algorithms';
+console.log(generateRandomGrid());
+
 class App extends Component {
   render() {
     return (
