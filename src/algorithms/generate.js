@@ -9,7 +9,6 @@ const types = {
   PAD: 'PAD',
 };
 
-const pickRandomIndex = array => _.random(0, array.length - 1);
 const constructItem = type => coordinates => ({ ...coordinates, type });
 
 export const constructGrid = ({ m, n }) =>
@@ -29,6 +28,63 @@ export const constructGrid = ({ m, n }) =>
     .value();
 
 /** Work-In-Progress */
+
+export const allocateGridCells = (unallocatedGrid) => {
+    let allocatedGridCoordinates = [];
+    let randomIndex = 0;
+    let count = 0;
+    
+    randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+
+    allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
+      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+      type: types.R2D2
+    }));
+    
+    randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+
+    allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
+      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+      type: types.TELEPORTAL
+    }));
+
+    count =  Math.floor(_.random(1, Math.floor(unallocatedGrid.length/2)));
+
+    for (var i = 0; i < count; i++){
+      randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+
+      allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
+      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+      type: types.PAD
+      }));
+     
+      randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+
+      allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
+        coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+        type: types.ROCK
+      }));
+    }
+
+    count =  Math.floor(_.random(0, unallocatedGrid.length));
+
+    for (i = 0; i < count; i++){
+      randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+
+      allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
+      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+      type: types.OBSTACLE
+      }));
+    }
+
+    unallocatedGrid.forEach(function(element) {
+      allocatedGridCoordinates = allocatedGridCoordinates.concat(element);
+      _.pull(unallocatedGrid, element);
+    },this);
+
+    return allocatedGridCoordinates;
+}
+
 export const generateRandomGrid = () => {
   // const gridDimensions = {
   //   m: _.random(5, 10),
@@ -46,9 +102,11 @@ export const generateRandomGrid = () => {
 
   console.log(unallocatedGrid);
 
+  const allocateGrid = allocateGridCells(unallocatedGrid);
+
+  console.log(allocateGrid);
+   
    /**
-   * @TODO: Generate items & randomly assign them to grid cells
-   * 
    * Constraints:
    *   • Items count cannot be greater than grid cell count
    *   • Items cannot overlap on the same cells
