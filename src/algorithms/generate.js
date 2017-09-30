@@ -33,54 +33,73 @@ export const allocateGridCells = (unallocatedGrid) => {
     let allocatedGridCoordinates = [];
     let randomIndex = 0;
     let count = 0;
-    
-    randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+    let item = {};
 
-    allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
-      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+    randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+
+    allocatedGridCoordinates = allocatedGridCoordinates.concat({
+      x: item.x,
+      y: item.y,
       type: types.R2D2
-    }));
+    });
     
     randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
-
-    allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
-      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+    
+    allocatedGridCoordinates = allocatedGridCoordinates.concat( {
+      x: item.x,
+      y: item.y,
       type: types.TELEPORTAL
-    }));
+    });
 
     count =  Math.floor(_.random(1, Math.floor(unallocatedGrid.length/2)));
 
     for (var i = 0; i < count; i++){
       randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+      item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
-      allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
-      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+      allocatedGridCoordinates = allocatedGridCoordinates.concat( {
+      x: item.x,
+      y: item.y,
       type: types.PAD
-      }));
+    });
      
       randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+      item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
-      allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
-        coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
-        type: types.ROCK
-      }));
+      allocatedGridCoordinates = allocatedGridCoordinates.concat( {
+      x: item.x,
+      y: item.y,
+      type: types.ROCK
+    });
     }
 
     count =  Math.floor(_.random(0, unallocatedGrid.length));
 
     for (i = 0; i < count; i++){
       randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+      item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
-      allocatedGridCoordinates = allocatedGridCoordinates.concat( constructItem({
-      coordinates: _.pullAt(unallocatedGrid, [randomIndex])[0],
+      allocatedGridCoordinates = allocatedGridCoordinates.concat( {
+      x: item.x,
+      y: item.y,
       type: types.OBSTACLE
-      }));
+    });
     }
 
-    unallocatedGrid.forEach(function(element) {
-      allocatedGridCoordinates = allocatedGridCoordinates.concat(element);
-      _.pull(unallocatedGrid, element);
-    },this);
+    count = unallocatedGrid.length;
+
+    for(i = 0; i < count; i++) {
+      item = _.pullAt(unallocatedGrid, [0])[0];
+      allocatedGridCoordinates = allocatedGridCoordinates.concat(item);
+    }
+    
+    allocatedGridCoordinates = _.orderBy(
+      allocatedGridCoordinates,
+      ['y','x'],
+      ['asc','asc'],
+    );
 
     return allocatedGridCoordinates;
 }
@@ -104,7 +123,7 @@ export const generateRandomGrid = () => {
 
   const allocateGrid = allocateGridCells(unallocatedGrid);
 
-  console.log(allocateGrid);
+  return allocateGrid;
    
    /**
    * Constraints:
