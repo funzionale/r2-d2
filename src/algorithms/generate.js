@@ -12,11 +12,17 @@ const types = {
 const pickRandomArrayIndex = array => _.random(0, array.length - 1);
 
 export const constructGrid = ({ m, n }) =>
-  _.chain(new Array(m * n))
-    .fill(0)
-    .map((_, index) => ({
-      x: index % m,
-      y: index % n,
-    }))
-    .sortBy('x')
+  _.chain(new Array(m))
+    .fill(new Array(n))
+    .map((innerArray, outerArrayIndex) =>
+      _.chain(innerArray)
+        .fill(0)
+        .map((_, innerArrayIndex) => ({
+          x: outerArrayIndex,
+          y: innerArrayIndex,
+        }))
+        .value(),
+    )
+    .flattenDeep()
+    .sortBy(['y', 'x'])
     .value();
