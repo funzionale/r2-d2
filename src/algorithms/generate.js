@@ -9,7 +9,8 @@ const types = {
   PAD: 'PAD',
 };
 
-const pickRandomArrayIndex = array => _.random(0, array.length - 1);
+const pickRandomIndex = array => _.random(0, array.length - 1);
+const constructItem = type => coordinates => ({ ...coordinates, type });
 
 export const constructGrid = ({ m, n }) =>
   _.chain(new Array(m))
@@ -26,3 +27,30 @@ export const constructGrid = ({ m, n }) =>
     .flattenDeep()
     .sortBy(['y', 'x'])
     .value();
+
+/** Work-In-Progress */
+export const generateRandomGrid = () => {
+  // const gridDimensions = {
+  //   m: _.random(5, 10),
+  //   n: _.random(5, 10),
+  // };
+
+  const gridDimensions = {
+    m: 3,
+    n: 3,
+  };
+
+  const unallocatedGrid = constructGrid(gridDimensions).map(
+    constructItem(types.EMPTY),
+  );
+
+  console.log(unallocatedGrid);
+
+   /**
+   * @TODO: Generate items & randomly assign them to grid cells
+   * 
+   * Constraints:
+   *   • Items count cannot be greater than grid cell count
+   *   • Items cannot overlap on the same cells
+   */
+};
