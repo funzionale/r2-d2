@@ -19,7 +19,7 @@ export const constructGrid = ({ m, n }) =>
     .sortBy(['y', 'x'])
     .value();
 
-export const allocateGrid = unallocatedGrid => {
+export const populateGrid = unallocatedGrid => {
   let allocatedGridCoordinates = [];
   let randomIndex = 0;
   let count = 0;
@@ -99,7 +99,7 @@ export const generateRandomGrid = () => {
     constructItem(types.EMPTY)
   );
 
-  const allocatedGrid = allocateGrid(unallocatedGrid);
+  const allocatedGrid = populateGrid(unallocatedGrid);
 
   return allocatedGrid;
 };
