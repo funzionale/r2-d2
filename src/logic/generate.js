@@ -21,7 +21,7 @@ export const constructGrid = ({ m, n }) =>
           x: outerArrayIndex,
           y: innerArrayIndex,
         }))
-        .value(),
+        .value()
     )
     .flattenDeep()
     .sortBy(['y', 'x'])
@@ -37,14 +37,14 @@ export const allocateGrid = unallocatedGrid => {
   item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
   allocatedGridCoordinates = allocatedGridCoordinates.concat(
-    constructItem(types.R2D2)(item),
+    constructItem(types.R2D2)(item)
   );
 
   randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
   item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
   allocatedGridCoordinates = allocatedGridCoordinates.concat(
-    constructItem(types.TELEPORTAL)(item),
+    constructItem(types.TELEPORTAL)(item)
   );
 
   count = Math.floor(_.random(1, Math.floor(unallocatedGrid.length / 2)));
@@ -54,14 +54,14 @@ export const allocateGrid = unallocatedGrid => {
     item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
     allocatedGridCoordinates = allocatedGridCoordinates.concat(
-      constructItem(types.PAD)(item),
+      constructItem(types.PAD)(item)
     );
 
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
     item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
     allocatedGridCoordinates = allocatedGridCoordinates.concat(
-      constructItem(types.ROCK)(item),
+      constructItem(types.ROCK)(item)
     );
   }
 
@@ -72,7 +72,7 @@ export const allocateGrid = unallocatedGrid => {
     item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
     allocatedGridCoordinates = allocatedGridCoordinates.concat(
-      constructItem(types.OBSTACLE)(item),
+      constructItem(types.OBSTACLE)(item)
     );
   }
 
@@ -86,7 +86,7 @@ export const allocateGrid = unallocatedGrid => {
   allocatedGridCoordinates = _.orderBy(
     allocatedGridCoordinates,
     ['y', 'x'],
-    ['asc', 'asc'],
+    ['asc', 'asc']
   );
 
   return allocatedGridCoordinates;
@@ -104,7 +104,7 @@ export const generateRandomGrid = () => {
   };
 
   const unallocatedGrid = constructGrid(gridDimensions).map(
-    constructItem(types.EMPTY),
+    constructItem(types.EMPTY)
   );
 
   const allocatedGrid = allocateGrid(unallocatedGrid);

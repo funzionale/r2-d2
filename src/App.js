@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { generateRandomGrid } from './algorithms';
+import { generateRandomGrid } from './logic';
 
 console.log('> generateRandomGrid() =>', generateRandomGrid());
 
