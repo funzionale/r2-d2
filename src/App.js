@@ -7,7 +7,9 @@ import { rootReducer, actionCreators } from './redux';
 import { generateRandomGrid } from './logic';
 import { Grid } from './components';
 
-class App extends Component {
+class App extends Component<void, void> {
+  store = {};
+
   constructor() {
     super();
     this.store = createStore(rootReducer);
