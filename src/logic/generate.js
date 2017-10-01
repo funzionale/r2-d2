@@ -1,13 +1,5 @@
 import _ from 'lodash';
-
-const types = {
-  EMPTY: 'EMPTY',
-  R2D2: 'R2D2',
-  TELEPORTAL: 'TELEPORTAL',
-  OBSTACLE: 'OBSTACLE',
-  ROCK: 'ROCK',
-  PAD: 'PAD',
-};
+import { types } from '.';
 
 const constructItem = type => coordinates => ({ ...coordinates, type });
 
