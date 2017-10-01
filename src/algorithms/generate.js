@@ -27,82 +27,70 @@ export const constructGrid = ({ m, n }) =>
     .sortBy(['y', 'x'])
     .value();
 
-/** Work-In-Progress */
+export const allocateGrid = unallocatedGrid => {
+  let allocatedGridCoordinates = [];
+  let randomIndex = 0;
+  let count = 0;
+  let item = {};
 
-export const allocateGridCells = (unallocatedGrid) => {
-    let allocatedGridCoordinates = [];
-    let randomIndex = 0;
-    let count = 0;
-    let item = {};
+  randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
+  item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
-    randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
+  allocatedGridCoordinates = allocatedGridCoordinates.concat(
+    constructItem(types.R2D2)(item),
+  );
+
+  randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
+  item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+
+  allocatedGridCoordinates = allocatedGridCoordinates.concat(
+    constructItem(types.TELEPORTAL)(item),
+  );
+
+  count = Math.floor(_.random(1, Math.floor(unallocatedGrid.length / 2)));
+
+  for (var i = 0; i < count; i++) {
+    randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
     item = _.pullAt(unallocatedGrid, [randomIndex])[0];
 
-    allocatedGridCoordinates = allocatedGridCoordinates.concat({
-      x: item.x,
-      y: item.y,
-      type: types.R2D2
-    });
-    
-    randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
-    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
-    
-    allocatedGridCoordinates = allocatedGridCoordinates.concat( {
-      x: item.x,
-      y: item.y,
-      type: types.TELEPORTAL
-    });
-
-    count =  Math.floor(_.random(1, Math.floor(unallocatedGrid.length/2)));
-
-    for (var i = 0; i < count; i++){
-      randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
-      item = _.pullAt(unallocatedGrid, [randomIndex])[0];
-
-      allocatedGridCoordinates = allocatedGridCoordinates.concat( {
-      x: item.x,
-      y: item.y,
-      type: types.PAD
-    });
-     
-      randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
-      item = _.pullAt(unallocatedGrid, [randomIndex])[0];
-
-      allocatedGridCoordinates = allocatedGridCoordinates.concat( {
-      x: item.x,
-      y: item.y,
-      type: types.ROCK
-    });
-    }
-
-    count =  Math.floor(_.random(0, unallocatedGrid.length));
-
-    for (i = 0; i < count; i++){
-      randomIndex =  Math.floor(_.random(0, unallocatedGrid.length - 1));
-      item = _.pullAt(unallocatedGrid, [randomIndex])[0];
-
-      allocatedGridCoordinates = allocatedGridCoordinates.concat( {
-      x: item.x,
-      y: item.y,
-      type: types.OBSTACLE
-    });
-    }
-
-    count = unallocatedGrid.length;
-
-    for(i = 0; i < count; i++) {
-      item = _.pullAt(unallocatedGrid, [0])[0];
-      allocatedGridCoordinates = allocatedGridCoordinates.concat(item);
-    }
-    
-    allocatedGridCoordinates = _.orderBy(
-      allocatedGridCoordinates,
-      ['y','x'],
-      ['asc','asc'],
+    allocatedGridCoordinates = allocatedGridCoordinates.concat(
+      constructItem(types.PAD)(item),
     );
 
-    return allocatedGridCoordinates;
-}
+    randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
+    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+
+    allocatedGridCoordinates = allocatedGridCoordinates.concat(
+      constructItem(types.ROCK)(item),
+    );
+  }
+
+  count = Math.floor(_.random(0, unallocatedGrid.length));
+
+  for (i = 0; i < count; i++) {
+    randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
+    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+
+    allocatedGridCoordinates = allocatedGridCoordinates.concat(
+      constructItem(types.OBSTACLE)(item),
+    );
+  }
+
+  count = unallocatedGrid.length;
+
+  for (i = 0; i < count; i++) {
+    item = _.pullAt(unallocatedGrid, [0])[0];
+    allocatedGridCoordinates = allocatedGridCoordinates.concat(item);
+  }
+
+  allocatedGridCoordinates = _.orderBy(
+    allocatedGridCoordinates,
+    ['y', 'x'],
+    ['asc', 'asc'],
+  );
+
+  return allocatedGridCoordinates;
+};
 
 export const generateRandomGrid = () => {
   // const gridDimensions = {
@@ -119,15 +107,7 @@ export const generateRandomGrid = () => {
     constructItem(types.EMPTY),
   );
 
-  console.log(unallocatedGrid);
+  const allocatedGrid = allocateGrid(unallocatedGrid);
 
-  const allocateGrid = allocateGridCells(unallocatedGrid);
-
-  return allocateGrid;
-   
-   /**
-   * Constraints:
-   *   • Items count cannot be greater than grid cell count
-   *   • Items cannot overlap on the same cells
-   */
+  return allocatedGrid;
 };
