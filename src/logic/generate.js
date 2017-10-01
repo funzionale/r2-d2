@@ -3,9 +3,22 @@
 import _ from 'lodash';
 import { types } from '.';
 
-const constructItem = type => coordinates => ({ ...coordinates, type });
+type Dimensions = {
+  m: number,
+  n: number,
+};
 
-export const constructGrid = ({ m, n }) =>
+type Coordinates = {
+  x: number,
+  y: number,
+};
+
+const constructItem = (type: string) => (coordinates: Coordinates) => ({
+  ...coordinates,
+  type,
+});
+
+export const constructGrid = ({ m, n }: Dimensions) =>
   _.chain(new Array(m))
     .fill(new Array(n))
     .map((innerArray, outerArrayIndex) =>
@@ -21,7 +34,7 @@ export const constructGrid = ({ m, n }) =>
     .sortBy(['y', 'x'])
     .value();
 
-export const populateGrid = unallocatedGrid => {
+export const populateGrid = (unallocatedGrid: Array<Coordinates>) => {
   let allocatedGridCoordinates = [];
   let randomIndex = 0;
   let count = 0;
