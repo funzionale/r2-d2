@@ -1,7 +1,11 @@
 /** @flow */
 
+import { actions } from '.';
+
 /** @TODO: Define */
-type Action = {};
+type Action = {
+  action: actions,
+};
 
 /** @TODO: Define */
 type State = {};
