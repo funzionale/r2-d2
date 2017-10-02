@@ -2,13 +2,13 @@
 
 import { actions } from '.';
 
-/** @TODO: Define */
 type Action = {
-  action: actions,
+  action: string,
 };
 
-/** @TODO: Define */
-type State = {};
+type State = {
+  delta: Array<Object>,
+};
 
 type Node = {
   state: State,
@@ -29,13 +29,26 @@ type Problem = {
 const initialState: Problem => State = problem => problem.initialState;
 
 /** @TODO: Implement */
-const expand: (Node, Array<Action>) => Array<Node> = () => {};
+const expand: (Node, Array<Action>) => Array<Node> = (node, actionsArray) => {
+  actionsArray.forEach(function(action) {
+    switch (action.action) {
+    // according to the action and grid data or the stateSpace
+    }
+  }, this);
+};
 
-/** @TODO: Implement */
-const makeNode: State => Node = state => {};
+const makeNode: State => Node = state => {
+  let intialNode: Node = {
+    state: state,
+    parent: null,
+    operator: null,
+    depth: 0,
+    pathCost: 0,
+  };
+  return intialNode;
+};
 
-/** @TODO: Implement */
-const makeQueue: Node => Array<Node> = () => {};
+const makeQueue: Node => Array<Node> = node => [node];
 
 const goalTest: Problem => State => boolean = problem => problem.goalTest;
 
