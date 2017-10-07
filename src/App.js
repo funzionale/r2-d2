@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { rootReducer, actionCreators } from './redux';
 import { generateRandomGrid } from './logic';
 import { Grid } from './components';
+import { generalSearch } from './logic';
 
 class App extends Component<void, void> {
   store = {};
@@ -16,7 +17,13 @@ class App extends Component<void, void> {
   }
 
   componentDidMount() {
-    this.store.dispatch(actionCreators.setGrid(generateRandomGrid()));
+    const grid = generateRandomGrid();
+    this.store.dispatch(actionCreators.setGrid(grid));
+    const problem = {
+      operators: ['NORTH', 'EAST', 'SOUTH', 'WEST', 'PUSH'],
+      initialState: grid,
+    };
+    const node = generalSearch(problem);
   }
 
   render() {

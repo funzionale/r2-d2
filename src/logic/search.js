@@ -7,7 +7,7 @@ type Action = {
 };
 
 type State = {
-  delta: Array<Object>,
+  grid: Array<Object>,
 };
 
 type Node = {
@@ -21,7 +21,7 @@ type Node = {
 type Problem = {
   operators: Array<Action>,
   initialState: State,
-  stateSpace: Array<State>,
+  stateSpace: (State, Array<Action>) => Array<State>,
   goalTest: State => boolean,
   pathCost: (Array<Action>) => number,
 };
