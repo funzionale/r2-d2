@@ -100,15 +100,16 @@ export const populateGrid = (unallocatedGrid: Array<Coordinates>) => {
 };
 
 export const generateRandomGrid = () => {
-  // const gridDimensions = {
-  //   m: _.random(5, 10),
-  //   n: _.random(5, 10),
-  // };
-
+  const FIXME_LATER = _.random(5, 10);
   const gridDimensions = {
-    m: 3,
-    n: 3,
+    m: FIXME_LATER,
+    n: FIXME_LATER,
   };
+
+  // const gridDimensions = {
+  //   m: 3,
+  //   n: 3,
+  // };
 
   const unallocatedGrid = constructGrid(gridDimensions).map(
     constructItem(types.EMPTY)
