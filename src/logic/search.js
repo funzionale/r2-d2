@@ -1,76 +1,81 @@
 /** @flow */
 
-import { actions } from '.';
+import _ from 'lodash';
 
-// TODO: Type Cell { types: [], x: 0, y: 0 }
-
-type Action = {
-  action: string,
-};
-
-type State = {
-  grid: Array<Object>,
-};
-
-type Node = {
-  state: State,
-  parent: Node,
-  operator: Action,
-  depth: number,
-  pathCost: number,
-};
-
-type Problem = {
-  operators: Array<Action>,
-  initialState: State,
-  stateSpace: (State, Array<Action>) => Array<State>,
-  goalTest: State => boolean,
-  pathCost: (Array<Action>) => number,
-};
+import type { Operator, Node, Problem, State, QueueingFunction } from '../flow';
 
 const initialState: Problem => State = problem => problem.initialState;
 
-/** @TODO: Implement */
-const expand: (Node, Array<Action>) => Array<Node> = (node, actionsArray) => {
-  actionsArray.forEach(function(action) {
-    switch (action.action) {
-    // according to the action and grid data or the stateSpace
-    }
-  }, this);
-};
-
-const makeNode: State => Node = state => {
-  let intialNode: Node = {
-    state: state,
-    parent: null,
-    operator: null,
-    depth: 0,
-    pathCost: 0,
-  };
-  return intialNode;
-};
+const makeNode: State => Node = state => ({
+  state: state,
+  parent: null,
+  operator: null,
+  depth: 0,
+  pathCost: 0,
+});
 
 const makeQueue: Node => Array<Node> = node => [node];
 
-const goalTest: Problem => State => boolean = problem => problem.goalTest;
-
 const state: Node => State = node => node.state;
 
-const operation: Problem => Array<Action> = problem => problem.operators;
+const goalTest: Problem => State => boolean = problem => state =>
+  problem.goalTest(state);
 
-export const generalSearch = (
-  problem: Problem,
-  queueingFunc: (Array<Node>, Array<Node>) => Array<Node>
+const expand: (Node, Problem) => Array<Node> = (parentNode, problem) => {
+  const { operators, stateSpace } = problem;
+  const { state } = parentNode;
+
+  let possibleStates = [];
+
+  operators.forEach(operator => {
+    possibleStates = possibleStates.concat(stateSpace(state, operators));
+  });
+
+  const childrenNodes = possibleStates.map(state => ({
+    state,
+    parent: parentNode,
+    operator: state.operator, // @FIXME: state doesn't contain operator
+    depth: parentNode.depth + 1,
+    pathCost: parentNode.pathCost + problem.pathCost(state.operator), // @FIXME: state doesn't contain operator
+  }));
+
+  return childrenNodes;
+};
+
+/** Depth-first search */
+export const enqueueAtFront: QueueingFunction = (oldNodes, newNodes) =>
+  newNodes.concat(oldNodes);
+
+/** Breadth-first search */
+export const enqueueAtEnd: QueueingFunction = (oldNodes, newNodes) =>
+  oldNodes.concat(newNodes);
+
+/** Uniform-cost search */
+export const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
+  _.sortBy(oldNodes.concat(newNodes), 'pathCost');
+
+/** @TODO: Implement iterative deepening search */
+
+/** @TODO: Implement Greedy search (with at least two heuristics) */
+
+/** @TODO: Implement A* search (with at least two admissible heuristics) */
+
+export const generalSearch: (Problem, QueueingFunction) => Node | null = (
+  problem,
+  queueingFunction
 ) => {
   let nodes = makeQueue(makeNode(initialState(problem)));
-  while (nodes.length > 0) {
-    const [node] = nodes.splice(0, 1);
+  while (!_.isEmpty(nodes)) {
+    const [node] = _.pullAt(nodes, 0);
     if (goalTest(problem)(state(node))) {
       return node;
     }
-    nodes = queueingFunc(nodes, expand(node, operation(problem)));
+    nodes = queueingFunction(nodes, expand(node, problem));
   }
-  return [];
+  return null;
 };
 
-/** @TODO: Implement queueing functions */
+export const retrace: Node => Array<Operator> = goalNode => {
+  // @TODO: Backtrack till search tree root node & construct sequence of operators that leads to goal node
+  return [];
+};
