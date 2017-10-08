@@ -15,7 +15,7 @@ type Coordinates = {
 
 const constructItem = (type: string) => (coordinates: Coordinates) => ({
   ...coordinates,
-  type,
+  types: [type],
 });
 
 export const constructGrid = ({ m, n }: Dimensions) =>

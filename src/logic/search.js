@@ -2,6 +2,8 @@
 
 import { actions } from '.';
 
+// TODO: Type Cell { types: [], x: 0, y: 0 }
+
 type Action = {
   action: string,
 };
