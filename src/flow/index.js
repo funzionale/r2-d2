@@ -19,9 +19,16 @@ export type Cell = {
   coordinates: Coordinates,
 };
 
+// type Grid
+
 export type State = {
   grid: Array<Cell>,
   isTeleportalActivated: boolean,
+};
+
+export type StateHistory = {
+  state: State,
+  operator: Operator,
 };
 
 export type Node = {
@@ -35,7 +42,7 @@ export type Node = {
 export type Problem = {
   operators: Array<Operator>,
   initialState: State,
-  stateSpace: (State, Array<Operator>) => Array<State>,
+  stateSpace: (State, Array<Operator>) => Array<StateHistory>,
   goalTest: State => boolean,
   pathCost: (Array<Operator>) => number,
 };

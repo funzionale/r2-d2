@@ -25,18 +25,14 @@ const expand: (Node, Problem) => Array<Node> = (parentNode, problem) => {
   const { operators, stateSpace } = problem;
   const { state } = parentNode;
 
-  let possibleStates = [];
+  const possibleStates = stateSpace(state, operators);
 
-  operators.forEach(operator => {
-    possibleStates = possibleStates.concat(stateSpace(state, operators));
-  });
-
-  const childrenNodes = possibleStates.map(state => ({
+  const childrenNodes = possibleStates.map(({ state, operator }) => ({
     state,
     parent: parentNode,
-    operator: state.operator, // @FIXME: state doesn't contain operator
+    operator,
     depth: parentNode.depth + 1,
-    pathCost: parentNode.pathCost + problem.pathCost(state.operator), // @FIXME: state doesn't contain operator
+    pathCost: parentNode.pathCost + problem.pathCost([operator]),
   }));
 
   return childrenNodes;

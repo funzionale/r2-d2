@@ -40,7 +40,7 @@ class App extends Component<void, void> {
       const { grid } = state;
       let possibleStates = [];
 
-      const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2);
+      const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2); // @FIXME: Remove void
 
       if (r2D2Cell) {
         const { coordinates: r2D2Coordinates } = r2D2Cell;
@@ -55,17 +55,26 @@ class App extends Component<void, void> {
                 y: r2D2Coordinates.y - 1,
               });
 
-              // if (
-              //   r2D2Coordinates.y !== 0 &&
-              //   !doesCellContainItem(newR2D2Cell, 'OBSTACLE') &&
-              //   !doesCellContainItem(newR2D2Cell, 'ROCK')
-              // ) {
-              //   newGrid.find(item => item.type === 'R2D2').type = 'EMPTY';
-              //   newGrid.find(
-              //     item => newR2D2Cell.x === item.x && newR2D2Cell.y === item.y,
-              //   ).type =
-              //     'R2D2';
-              // }
+              if (newR2D2Cell) {
+                if (
+                  r2D2Coordinates.y === 0 ||
+                  doesCellContainItem(newR2D2Cell, 'OBSTACLE')
+                ) {
+                  //go no where
+                } else if (
+                  newR2D2Cell.items.length === 0 ||
+                  (newR2D2Cell.items.length === 1 &&
+                    doesCellContainItem(newR2D2Cell, 'PAD')) ||
+                  doesCellContainItem(newR2D2Cell, 'TELEPORTAL')
+                ) {
+                  newGrid.find(item => item.type === 'R2D2').type = 'EMPTY';
+                  newGrid.find(
+                    item => newR2D2Cell.x === item.x && newR2D2Cell.y === item.y
+                  ).type =
+                    'R2D2';
+                }
+              }
+              // Going into wall
 
               break;
             case 'EAST':

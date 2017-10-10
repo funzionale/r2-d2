@@ -33,3 +33,18 @@ export const moveR2D2: (Array<Cell>, Operator) => Array<Cell> = (
   // @TODO: If illegal action, return same grid
   return grid;
 };
+
+export const isCellEmpty: Cell => boolean = cell => cell.items.length === 0;
+
+// export const inactivatedPadsCount: Array<Cell> => number = () => {};
+
+// export const isCellAdjacentToWall: Cell => boolean = () => {};
+
+// export const gridStats: Array<Cell> => Object = () => {};
+
+// export const moveItem: (
+//   Grid,
+//   Coordinates,
+//   Coordinates,
+//   Item,
+// ) => Grid = () => {};
