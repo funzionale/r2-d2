@@ -48,7 +48,7 @@ class App extends Component<void, void> {
         operators.forEach(operator => {
           const newGrid = _.cloneDeep(grid);
 
-          switch (operator) {
+          switch (operator.name) {
             case 'NORTH':
               const newR2D2Cell = findCellByCoordinates(grid, {
                 x: r2D2Coordinates.x,
