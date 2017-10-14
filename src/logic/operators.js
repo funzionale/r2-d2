@@ -2,13 +2,11 @@
 
 import type { Operator } from '../flow';
 
-// @TODO: Convert to objects of { name, cost }
+const NORTH: Operator = { name: 'NORTH', cost: 1 };
+const SOUTH: Operator = { name: 'SOUTH', cost: 1 };
+const EAST: Operator = { name: 'EAST', cost: 1 };
+const WEST: Operator = { name: 'WEST', cost: 1 };
 
-const NORTH: Operator = 'NORTH';
-const SOUTH: Operator = 'SOUTH';
-const EAST: Operator = 'EAST';
-const WEST: Operator = 'WEST';
-
-const operators = { NORTH, SOUTH, EAST, WEST };
+const operators = [NORTH, SOUTH, EAST, WEST];
 
 export default operators;

@@ -2,7 +2,10 @@
 
 export type Item = 'R2D2' | 'TELEPORTAL' | 'OBSTACLE' | 'ROCK' | 'PAD';
 
-export type Operator = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
+export type Operator = {
+  name: 'NORTH' | 'SOUTH' | 'EAST' | 'WEST',
+  cost: number,
+};
 
 export type Dimensions = {
   m: number,

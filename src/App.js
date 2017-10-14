@@ -107,21 +107,26 @@ class App extends Component<void, void> {
       return possibleStates;
     };
 
-    const { NORTH, SOUTH, EAST, WEST } = operators;
-
     const problem: Problem = {
-      operators: [NORTH, SOUTH, EAST, WEST],
+      operators,
       initialState: {
         grid: randomlyGeneratedGrid,
         isTeleportalActivated: false,
       },
       stateSpace,
       goalTest: state => {
-        // @TODO: Check if R2D2 is on the same cell as the TELEPORTAL
-        // @TODO: Check if TELEPORTAL is activated
-        return false;
+        const teleportalCell = findCellByItem(state.grid, 'TELEPORTAL');
+        return (
+          teleportalCell !== undefined &&
+          doesCellContainItem(teleportalCell, 'R2D2') &&
+          state.isTeleportalActivated
+        );
       },
-      pathCost: operators => 1 * operators.length,
+      pathCost: operators =>
+        operators.reduce(
+          (accumulator, operator) => accumulator + operator.cost,
+          0
+        ),
     };
 
     const goalNode: Node | null = generalSearch(problem, enqueueAtFront);
