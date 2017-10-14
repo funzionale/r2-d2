@@ -20,6 +20,7 @@ import {
   findCellByCoordinates,
   filterCellsByItem,
   moveR2D2,
+  isCellEmpty,
 } from './logic';
 
 import type { Cell, Node, Operator, Problem } from './flow';
@@ -43,58 +44,82 @@ class App extends Component<void, void> {
       const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2); // @FIXME: Remove void
 
       if (r2D2Cell) {
-        const { coordinates: r2D2Coordinates } = r2D2Cell;
+        const { coordinates: currentR2D2Coordinates } = r2D2Cell;
 
         operators.forEach(operator => {
           const newGrid = _.cloneDeep(grid);
 
           switch (operator.name) {
             case 'NORTH':
-              const newR2D2Cell = findCellByCoordinates(grid, {
-                x: r2D2Coordinates.x,
-                y: r2D2Coordinates.y - 1,
+              const newR2D2Cell = findCellByCoordinates(newGrid, {
+                x: currentR2D2Coordinates.x,
+                y: currentR2D2Coordinates.y - 1,
               });
 
               if (newR2D2Cell) {
+                // Destination cell is wall or obstacle
                 if (
-                  r2D2Coordinates.y === 0 ||
+                  currentR2D2Coordinates.y === 0 ||
                   doesCellContainItem(newR2D2Cell, 'OBSTACLE')
                 ) {
                   //go no where
                 } else if (
-                  newR2D2Cell.items.length === 0 ||
+                  isCellEmpty(newR2D2Cell) ||
                   (newR2D2Cell.items.length === 1 &&
                     doesCellContainItem(newR2D2Cell, 'PAD')) ||
                   doesCellContainItem(newR2D2Cell, 'TELEPORTAL')
                 ) {
-                  newGrid.find(item => item.type === 'R2D2').type = 'EMPTY';
-                  newGrid.find(
-                    item => newR2D2Cell.x === item.x && newR2D2Cell.y === item.y
-                  ).type =
-                    'R2D2';
+                  // Destination cell is empty or teleportal or ONLY pad
+                  newGrid
+                    .find(item => doesCellContainItem(item, 'R2D2'))
+                    .items.pop();
+                  newR2D2Cell.items.push('R2D2');
+                } else if (
+                  newR2D2Cell.items.length === 1 &&
+                  doesCellContainItem(newR2D2Cell, 'ROCK')
+                ) {
+                  // Destination cell has rock
+                  const cellAboveRock = findCellByCoordinates(newGrid, {
+                    x: newR2D2Cell.coordinates.x,
+                    y: newR2D2Cell.coordinates.y - 1,
+                  });
+                  if (
+                    !cellAboveRock ||
+                    doesCellContainItem(cellAboveRock, 'OBSTACLE') ||
+                    doesCellContainItem(cellAboveRock, 'ROCK')
+                  ) {
+                    // Do nothing
+                  } else {
+                    //push on empty or a pad
+                    newR2D2Cell.items.pop();
+                    cellAboveRock.items.push('ROCK');
+
+                    newGrid
+                      .find(item => doesCellContainItem(item, 'R2D2'))
+                      .items.pop();
+                    newR2D2Cell.items.push('R2D2');
+                  }
                 }
               }
-              // Going into wall
-
               break;
             case 'EAST':
               const newR2D2Cell = findCellByCoordinates(grid, {
-                x: r2D2Coordinates.x + 1,
-                y: r2D2Coordinates.y,
+                x: currentR2D2Coordinates.x + 1,
+                y: currentR2D2Coordinates.y,
               });
               // @TODO: Compute new state & append to possible states
               break;
             case 'SOUTH':
               const newR2D2Cell = findCellByCoordinates(grid, {
-                x: r2D2Coordinates.x,
-                y: r2D2Coordinates.y + 1,
+                x: currentR2D2Coordinates.x,
+                y: currentR2D2Coordinates.y + 1,
               });
               // @TODO: Compute new state & append to possible states
               break;
             case 'WEST':
               const newR2D2Cell = findCellByCoordinates(grid, {
-                x: r2D2Coordinates.x - 1,
-                y: r2D2Coordinates.y,
+                x: currentR2D2Coordinates.x - 1,
+                y: currentR2D2Coordinates.y,
               });
               // @TODO: Compute new state & append to possible states
               break;
@@ -116,10 +141,10 @@ class App extends Component<void, void> {
       stateSpace,
       goalTest: state => {
         const teleportalCell = findCellByItem(state.grid, 'TELEPORTAL');
-        return (
-          teleportalCell !== undefined &&
-          doesCellContainItem(teleportalCell, 'R2D2') &&
-          state.isTeleportalActivated
+        return Boolean(
+          teleportalCell &&
+            doesCellContainItem(teleportalCell, 'R2D2') &&
+            state.isTeleportalActivated
         );
       },
       pathCost: operators =>
