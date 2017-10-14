@@ -27,16 +27,13 @@ const expand: (Node, Problem) => Array<Node> = (parentNode, problem) => {
 
   const possibleStates = stateSpace(state, operators);
 
-  const childrenNodes = possibleStates.map(({ state, operator }) => {
-    console.log(operator);
-    return {
-      state,
-      parent: parentNode,
-      operator,
-      depth: parentNode.depth + 1,
-      pathCost: parentNode.pathCost + problem.pathCost([operator]),
-    };
-  });
+  const childrenNodes = possibleStates.map(({ state, operator }) => ({
+    state,
+    parent: parentNode,
+    operator,
+    depth: parentNode.depth + 1,
+    pathCost: parentNode.pathCost + problem.pathCost([operator]),
+  }));
 
   return childrenNodes;
 };
@@ -64,7 +61,13 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   queueingFunction
 ) => {
   let nodes = makeQueue(makeNode(initialState(problem)));
+  let expansionsCount = 0;
   while (!_.isEmpty(nodes)) {
+    /** Guard against infinite loops */
+    if (++expansionsCount === 10000) {
+      console.log('♻️ Infinite loop!');
+      break;
+    }
     const [node] = _.pullAt(nodes, 0);
     if (goalTest(problem)(state(node))) {
       return node;

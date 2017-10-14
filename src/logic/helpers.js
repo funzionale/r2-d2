@@ -50,26 +50,27 @@ export const moveR2D2 = (grid: Array<Cell>, operatorName: string) => {
             : currentR2D2Coordinates.y,
     });
     if (newR2D2Cell) {
-      // Destination cell is wall or obstacle
       if (
+        // Destination cell is WALL or OBSTACLE
         currentR2D2Coordinates.x === 0 ||
         doesCellContainItem(newR2D2Cell, items.OBSTACLE)
       ) {
-        //go no where
+        // Do nothing
+        return null;
       } else if (
+        // Destination cell is EMPTY or TELEPORTAL or only PAD
         isCellEmpty(newR2D2Cell) ||
         (newR2D2Cell.items.length === 1 &&
           doesCellContainItem(newR2D2Cell, items.PAD)) ||
         doesCellContainItem(newR2D2Cell, items.TELEPORTAL)
       ) {
-        // Destination cell is empty or teleportal or ONLY pad
         newGrid.find(item => doesCellContainItem(item, items.R2D2)).items.pop();
         newR2D2Cell.items.push(items.R2D2);
       } else if (
+        // Destination cell contains ROCK
         newR2D2Cell.items.length === 1 &&
         doesCellContainItem(newR2D2Cell, items.ROCK)
       ) {
-        // Destination cell has rock
         const cellNextToRock = findCellByCoordinates(newGrid, {
           x:
             operatorName === 'WEST'
@@ -90,8 +91,9 @@ export const moveR2D2 = (grid: Array<Cell>, operatorName: string) => {
           doesCellContainItem(cellNextToRock, items.ROCK)
         ) {
           // Do nothing
+          return null;
         } else {
-          //push on empty or a pad
+          // Push ROCK towards EMPTY or PAD
           newR2D2Cell.items.pop();
           cellNextToRock.items.push(items.ROCK);
 

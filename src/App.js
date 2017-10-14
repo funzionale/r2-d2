@@ -9,7 +9,6 @@ import { Grid } from './components';
 import {
   generateRandomGrid,
   operators,
-  items,
   generalSearch,
   enqueueAtFront,
   enqueueAtEnd,
@@ -17,14 +16,11 @@ import {
   retrace,
   doesCellContainItem,
   findCellByItem,
-  findCellByCoordinates,
-  filterCellsByItem,
   moveR2D2,
   isTeleportalActivated,
-  isCellEmpty,
 } from './logic';
 
-import type { Cell, Node, Operator, Problem, StateHistory } from './flow';
+import type { Cell, Node, Problem, StateHistory } from './flow';
 
 class App extends Component<void, void> {
   store = {};
@@ -43,16 +39,22 @@ class App extends Component<void, void> {
     this.store.dispatch(actionCreators.setGrid(randomlyGeneratedGrid));
 
     const stateSpace = (state, operators): Array<StateHistory> =>
-      operators.map(operator => {
-        const grid = moveR2D2(state.grid, operator.name);
-        return {
-          state: {
-            grid,
-            isTeleportalActivated: isTeleportalActivated(grid),
-          },
-          operator,
-        };
-      });
+      operators
+        .map(operator => {
+          const grid = moveR2D2(state.grid, operator.name);
+          if (!grid) {
+            return null;
+          }
+
+          return {
+            state: {
+              grid,
+              isTeleportalActivated: isTeleportalActivated(grid),
+            },
+            operator,
+          };
+        })
+        .filter(state => !_.isNull(state));
 
     const problem: Problem = {
       operators,
@@ -76,23 +78,26 @@ class App extends Component<void, void> {
         ),
     };
 
-    console.log('Starting search');
+    console.log(
+      '🔎 Search started\n0️⃣ Initial state:\n',
+      JSON.stringify(problem.initialState, null, 2)
+    );
     const goalNode: Node | null = generalSearch(problem, enqueueAtFront);
-    console.log('Search ended');
+    console.log('🔎 Search ended!');
     // const goalNode = generalSearch(problem, enqueueAtEnd);
     // const goalNode = generalSearch(problem, orderedInsert);
 
-    // if (goalNode) {
-    //   const operatorsSequence: Array<Operator> = retrace(goalNode);
-    //   console.log(
-    //     '✅ A solution was found!\n',
-    //     JSON.stringify(operatorsSequence)
-    //   );
-    // } else {
-    //   console.log(
-    //     '⛔ A solution for this problem using the specified queueing function cannot be found.'
-    //   );
-    // }
+    if (goalNode) {
+      const operatorsSequence: Array<Operator> = retrace(goalNode);
+      console.log(
+        '✅ A solution was found!\n',
+        JSON.stringify(operatorsSequence)
+      );
+    } else {
+      console.log(
+        '⛔ A solution for this problem using the specified queueing function cannot be found.'
+      );
+    }
   }
 
   render() {
