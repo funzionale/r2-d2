@@ -8,8 +8,8 @@ export type Operator = {
 };
 
 export type Dimensions = {
-  m: number,
-  n: number,
+  m: number, // Columns
+  n: number, // Row
 };
 
 export type Coordinates = {

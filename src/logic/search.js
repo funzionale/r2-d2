@@ -27,13 +27,16 @@ const expand: (Node, Problem) => Array<Node> = (parentNode, problem) => {
 
   const possibleStates = stateSpace(state, operators);
 
-  const childrenNodes = possibleStates.map(({ state, operator }) => ({
-    state,
-    parent: parentNode,
-    operator,
-    depth: parentNode.depth + 1,
-    pathCost: parentNode.pathCost + problem.pathCost([operator]),
-  }));
+  const childrenNodes = possibleStates.map(({ state, operator }) => {
+    console.log(operator);
+    return {
+      state,
+      parent: parentNode,
+      operator,
+      depth: parentNode.depth + 1,
+      pathCost: parentNode.pathCost + problem.pathCost([operator]),
+    };
+  });
 
   return childrenNodes;
 };

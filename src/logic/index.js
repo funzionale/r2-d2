@@ -16,4 +16,5 @@ export {
   findCellByCoordinates,
   filterCellsByItem,
   moveR2D2,
+  isTeleportalActivated,
 } from './helpers';
