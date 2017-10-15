@@ -5,8 +5,10 @@ import items from './items';
 
 import type { Cell, Coordinates, Item } from '../flow';
 
+export const isCellEmpty: Cell => boolean = cell => cell.items.length === 0;
+
 export const doesCellContainItem: (Cell, Item) => boolean = (cell, item) =>
-  Boolean(cell.items.find(cellItem => cellItem === item));
+  cell.items.includes(item);
 
 export const findCellByItem: (Array<Cell>, Item) => Cell | void = (
   grid,
@@ -27,6 +29,14 @@ export const filterCellsByItem: (Array<Cell>, Item) => Array<Cell> = (
   grid,
   item
 ) => grid.filter(cell => doesCellContainItem(cell, item));
+
+export const isTeleportalActivated: (Array<Cell>) => boolean = grid => {
+  const cellsContainingPads = filterCellsByItem(grid, 'PAD');
+  const cellsContainingPadsWithoutRocks = cellsContainingPads.filter(
+    cell => !doesCellContainItem(cell, 'ROCK')
+  );
+  return cellsContainingPadsWithoutRocks.length === 0;
+};
 
 export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
   grid,
@@ -110,16 +120,6 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
   }
 
   return newGrid;
-};
-
-export const isCellEmpty: Cell => boolean = cell => cell.items.length === 0;
-
-export const isTeleportalActivated: (Array<Cell>) => boolean = grid => {
-  const cellsContainingRocks = grid.filter(
-    cell => cell.items.includes(items.ROCK) && !cell.items.includes(items.PAD)
-  );
-
-  return cellsContainingRocks.length === 0;
 };
 
 // @TODO: Convert 1D grid to 2D
