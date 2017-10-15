@@ -28,7 +28,10 @@ export const filterCellsByItem: (Array<Cell>, Item) => Array<Cell> = (
   item
 ) => grid.filter(cell => doesCellContainItem(cell, item));
 
-export const moveR2D2 = (grid: Array<Cell>, operatorName: string) => {
+export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
+  grid,
+  operatorName
+) => {
   const newGrid = _.cloneDeep(grid);
   const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2); // @FIXME: Remove void
 
@@ -49,10 +52,10 @@ export const moveR2D2 = (grid: Array<Cell>, operatorName: string) => {
             ? currentR2D2Coordinates.y + 1
             : currentR2D2Coordinates.y,
     });
+    // Destination cell is not a WALL
     if (newR2D2Cell) {
       if (
-        // Destination cell is WALL or OBSTACLE
-        currentR2D2Coordinates.x === 0 ||
+        // Destination cell is an OBSTACLE
         doesCellContainItem(newR2D2Cell, items.OBSTACLE)
       ) {
         // Do nothing
@@ -112,13 +115,10 @@ export const moveR2D2 = (grid: Array<Cell>, operatorName: string) => {
 export const isCellEmpty: Cell => boolean = cell => cell.items.length === 0;
 
 export const isTeleportalActivated = (grid: Array<Cell>): boolean => {
-  const cellsContainingPads = grid.filter(cell =>
-    cell.items.includes(items.PAD)
+  const cellsContainingRocks = grid.filter(
+    cell => cell.items.includes(items.ROCK) && !cell.items.includes(items.PAD)
   );
-  const cellsContainingRocks = grid.filter(cell =>
-    cell.items.includes(items.ROCK)
-  );
-  return _.difference(cellsContainingPads, cellsContainingRocks).length === 0;
+  return cellsContainingRocks.length === 0;
 };
 
 // @TODO: Convert 1D grid to 2D

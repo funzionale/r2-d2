@@ -20,7 +20,14 @@ import {
   isTeleportalActivated,
 } from './logic';
 
-import type { Cell, Node, Problem, StateHistory } from './flow';
+import type {
+  Cell,
+  Node,
+  Problem,
+  State,
+  Operator,
+  StateHistory,
+} from './flow';
 
 class App extends Component<void, void> {
   store = {};
@@ -31,30 +38,30 @@ class App extends Component<void, void> {
   }
 
   componentDidMount() {
-    // @FIXME
-    const m = 3;
-    const n = 3;
-
     const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
     this.store.dispatch(actionCreators.setGrid(randomlyGeneratedGrid));
 
-    const stateSpace = (state, operators): Array<StateHistory> =>
+    const stateSpace: (State, Array<Operator>) => Array<StateHistory> = (
+      state,
       operators
-        .map(operator => {
-          const grid = moveR2D2(state.grid, operator.name);
-          if (!grid) {
-            return null;
-          }
+    ) => {
+      let possibleStateHistories = [];
 
-          return {
+      operators.forEach(operator => {
+        const grid: Array<Cell> | null = moveR2D2(state.grid, operator.name);
+        if (grid) {
+          possibleStateHistories = possibleStateHistories.concat({
             state: {
               grid,
               isTeleportalActivated: isTeleportalActivated(grid),
             },
             operator,
-          };
-        })
-        .filter(state => !_.isNull(state));
+          });
+        }
+      });
+
+      return possibleStateHistories;
+    };
 
     const problem: Problem = {
       operators,
@@ -82,10 +89,10 @@ class App extends Component<void, void> {
       '🔎 Search started\n0️⃣ Initial state:\n',
       JSON.stringify(problem.initialState, null, 2)
     );
-    const goalNode: Node | null = generalSearch(problem, enqueueAtFront);
+    // const goalNode: Node | null = generalSearch(problem, enqueueAtFront);
+    const goalNode: Node | null = generalSearch(problem, enqueueAtEnd);
+    // const goalNode: Node | null = generalSearch(problem, orderedInsert);
     console.log('🔎 Search ended!');
-    // const goalNode = generalSearch(problem, enqueueAtEnd);
-    // const goalNode = generalSearch(problem, orderedInsert);
 
     if (goalNode) {
       const operatorsSequence: Array<Operator> = retrace(goalNode);

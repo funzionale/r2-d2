@@ -25,9 +25,9 @@ const expand: (Node, Problem) => Array<Node> = (parentNode, problem) => {
   const { operators, stateSpace } = problem;
   const { state } = parentNode;
 
-  const possibleStates = stateSpace(state, operators);
+  const possibleStateHistories = stateSpace(state, operators);
 
-  const childrenNodes = possibleStates.map(({ state, operator }) => ({
+  const childrenNodes = possibleStateHistories.map(({ state, operator }) => ({
     state,
     parent: parentNode,
     operator,
@@ -64,7 +64,7 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   let expansionsCount = 0;
   while (!_.isEmpty(nodes)) {
     /** Guard against infinite loops */
-    if (++expansionsCount === 10000) {
+    if (expansionsCount++ === 10000) {
       console.log('♻️ Infinite loop!');
       break;
     }
