@@ -32,9 +32,11 @@ export const filterCellsByItem: (Array<Cell>, Item) => Array<Cell> = (
 
 export const isTeleportalActivated: (Array<Cell>) => boolean = grid => {
   const cellsContainingPads = filterCellsByItem(grid, items.PAD);
+
   const cellsContainingPadsWithoutRocks = cellsContainingPads.filter(
     cell => !doesCellContainItem(cell, items.ROCK)
   );
+
   return cellsContainingPadsWithoutRocks.length === 0;
 };
 
@@ -42,13 +44,13 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
   grid,
   operatorName
 ) => {
-  const newGrid = _.cloneDeep(grid);
+  const newGrid: Array<Cell> = _.cloneDeep(grid);
   const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2);
 
   if (r2D2Cell) {
     const { coordinates: currentR2D2Coordinates } = r2D2Cell;
 
-    const newR2D2Cell = findCellByCoordinates(grid, {
+    const newR2D2Cell: Cell | void = findCellByCoordinates(grid, {
       x:
         operatorName === 'WEST'
           ? currentR2D2Coordinates.x - 1
@@ -88,7 +90,7 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
         newR2D2Cell.items.length === 1 &&
         doesCellContainItem(newR2D2Cell, items.ROCK)
       ) {
-        const cellNextToRock = findCellByCoordinates(newGrid, {
+        const cellNextToRock: Cell | void = findCellByCoordinates(newGrid, {
           x:
             operatorName === 'WEST'
               ? newR2D2Cell.coordinates.x - 1

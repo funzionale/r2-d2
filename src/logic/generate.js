@@ -29,11 +29,11 @@ export const constructGrid: Dimensions => Array<Coordinates> = ({ m, n }) =>
 export const populateGrid: (
   Array<Coordinates>
 ) => Array<Cell> = coordinates => {
-  const unallocatedGrid = _.cloneDeep(coordinates);
-  let allocatedGrid = [];
-  let randomCoordinates = {};
-  let randomIndex = 0;
-  let count = 0;
+  const unallocatedGrid: Array<Coordinates> = _.cloneDeep(coordinates);
+  let allocatedGrid: Array<Cell> = [];
+  let randomCoordinates: Coordinates | null = null;
+  let randomIndex: number = 0;
+  let count: number = 0;
 
   randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
   [randomCoordinates] = _.pullAt(unallocatedGrid, randomIndex);
@@ -85,18 +85,18 @@ export const populateGrid: (
 };
 
 export const generateRandomGrid = () => {
-  // const gridDimensions = {
+  // const gridDimensions: Dimensions = {
   //   m: _.random(5, 10),
   //   n: _.random(5, 10),
   // };
 
-  const gridDimensions = {
+  const gridDimensions: Dimensions = {
     m: 3,
     n: 3,
   };
 
-  const unallocatedGrid = constructGrid(gridDimensions);
-  const allocatedGrid = populateGrid(unallocatedGrid);
+  const unallocatedGrid: Array<Coordinates> = constructGrid(gridDimensions);
+  const allocatedGrid: Array<Cell> = populateGrid(unallocatedGrid);
 
   return allocatedGrid;
 };

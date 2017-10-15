@@ -80,7 +80,11 @@ class App extends Component<void, void> {
     };
 
     const goalTest: State => boolean = state => {
-      const teleportalCell = findCellByItem(state.grid, items.TELEPORTAL);
+      const teleportalCell: Cell | void = findCellByItem(
+        state.grid,
+        items.TELEPORTAL
+      );
+
       return Boolean(
         teleportalCell &&
           doesCellContainItem(teleportalCell, items.R2D2) &&

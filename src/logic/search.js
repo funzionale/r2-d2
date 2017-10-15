@@ -72,8 +72,8 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   problem,
   queueingFunction
 ) => {
-  let nodes = makeQueue(makeNode(initialState(problem)));
-  let expansionsCount = 0;
+  let nodes: Array<Node> = makeQueue(makeNode(initialState(problem)));
+  let expansionsCount: number = 0;
   while (!_.isEmpty(nodes)) {
     /** Guard against infinite loops */
     if (expansionsCount++ === 10000) {
