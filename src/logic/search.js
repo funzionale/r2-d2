@@ -28,7 +28,11 @@ const state: Node => State = node => node.state;
 const goalTest: Problem => State => boolean = problem => state =>
   problem.goalTest(state);
 
-const expand: (Node, Problem) => Array<Node> = (parentNode, problem) => {
+const expand: (Node, Problem, Array<State>) => Array<Node> = (
+  parentNode,
+  problem,
+  history
+) => {
   const { operators, stateSpace } = problem;
   const { state } = parentNode;
 
@@ -37,15 +41,15 @@ const expand: (Node, Problem) => Array<Node> = (parentNode, problem) => {
     operators
   );
 
-  const childrenNodes: Array<
-    Node
-  > = possibleNextStatesWithOperators.map(({ state, operator }) => ({
-    state,
-    parent: parentNode,
-    operator,
-    depth: parentNode.depth + 1,
-    pathCost: parentNode.pathCost + problem.pathCost([operator]),
-  }));
+  const childrenNodes: Array<Node> = possibleNextStatesWithOperators
+    .map(({ state, operator }) => ({
+      state,
+      parent: parentNode,
+      operator,
+      depth: parentNode.depth + 1,
+      pathCost: parentNode.pathCost + problem.pathCost([operator]),
+    }))
+    .filter(node => !history.includes(node.state));
 
   return childrenNodes;
 };
@@ -73,6 +77,7 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   queueingFunction
 ) => {
   let nodes: Array<Node> = makeQueue(makeNode(initialState(problem)));
+  let history: Array<State> = [];
   let expansionsCount: number = 0;
   while (!_.isEmpty(nodes)) {
     /** Guard against infinite loops */
@@ -84,7 +89,8 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
     if (goalTest(problem)(state(node))) {
       return node;
     }
-    nodes = queueingFunction(nodes, expand(node, problem));
+    nodes = queueingFunction(nodes, expand(node, problem, history));
+    history = _.uniq(history.concat(nodes.map(node => node.state)));
   }
   return null;
 };
