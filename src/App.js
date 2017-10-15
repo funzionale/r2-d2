@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import _ from 'lodash';
 import { rootReducer, actionCreators } from './redux';
 import { Grid } from './components';
 import {
