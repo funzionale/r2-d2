@@ -25,7 +25,7 @@ import type {
   Problem,
   State,
   Operator,
-  StateHistory,
+  StateWithOperator,
 } from './flow';
 
 class App extends Component<void, void> {
@@ -40,7 +40,7 @@ class App extends Component<void, void> {
     const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
     this.store.dispatch(actionCreators.setGrid(randomlyGeneratedGrid));
 
-    const stateSpace: (State, Array<Operator>) => Array<StateHistory> = (
+    const stateSpace: (State, Array<Operator>) => Array<StateWithOperator> = (
       state,
       operators
     ) => {
