@@ -1,74 +1,101 @@
 /** @flow */
 
-import { actions } from '.';
+import _ from 'lodash';
 
-type Action = {
-  action: string,
-};
-
-type State = {
-  delta: Array<Object>,
-};
-
-type Node = {
-  state: State,
-  parent: Node,
-  operator: Action,
-  depth: number,
-  pathCost: number,
-};
-
-type Problem = {
-  operators: Array<Action>,
-  initialState: State,
-  stateSpace: Array<State>,
-  goalTest: State => boolean,
-  pathCost: (Array<Action>) => number,
-};
+import type {
+  Operator,
+  Node,
+  Problem,
+  State,
+  StateWithOperator,
+  QueueingFunction,
+} from '../flow';
 
 const initialState: Problem => State = problem => problem.initialState;
 
-/** @TODO: Implement */
-const expand: (Node, Array<Action>) => Array<Node> = (node, actionsArray) => {
-  actionsArray.forEach(function(action) {
-    switch (action.action) {
-    // according to the action and grid data or the stateSpace
-    }
-  }, this);
-};
-
-const makeNode: State => Node = state => {
-  let intialNode: Node = {
-    state: state,
-    parent: null,
-    operator: null,
-    depth: 0,
-    pathCost: 0,
-  };
-  return intialNode;
-};
+const makeNode: State => Node = state => ({
+  state: state,
+  parent: null,
+  operator: null,
+  depth: 0,
+  pathCost: 0,
+});
 
 const makeQueue: Node => Array<Node> = node => [node];
 
-const goalTest: Problem => State => boolean = problem => problem.goalTest;
-
 const state: Node => State = node => node.state;
 
-const operation: Problem => Array<Action> = problem => problem.operators;
+const goalTest: Problem => State => boolean = problem => state =>
+  problem.goalTest(state);
 
-export const generalSearch = (
-  problem: Problem,
-  queueingFunc: (Array<Node>, Array<Node>) => Array<Node>
+const expand: (Node, Problem, Array<State>) => Array<Node> = (
+  parentNode,
+  problem,
+  history
 ) => {
-  let nodes = makeQueue(makeNode(initialState(problem)));
-  while (nodes.length > 0) {
-    const [node] = nodes.splice(0, 1);
+  const { operators, stateSpace } = problem;
+  const { state } = parentNode;
+
+  const possibleNextStatesWithOperators: Array<StateWithOperator> = stateSpace(
+    state,
+    operators
+  );
+
+  const childrenNodes: Array<Node> = possibleNextStatesWithOperators
+    .map(({ state, operator }) => ({
+      state,
+      parent: parentNode,
+      operator,
+      depth: parentNode.depth + 1,
+      pathCost: parentNode.pathCost + problem.pathCost([operator]),
+    }))
+    .filter(node => !history.includes(node.state));
+
+  return childrenNodes;
+};
+
+/** Depth-first search */
+export const enqueueAtFront: QueueingFunction = (oldNodes, newNodes) =>
+  newNodes.concat(oldNodes);
+
+/** Breadth-first search */
+export const enqueueAtEnd: QueueingFunction = (oldNodes, newNodes) =>
+  oldNodes.concat(newNodes);
+
+/** Uniform-cost search */
+export const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
+  _.sortBy(oldNodes.concat(newNodes), 'pathCost');
+
+/** @TODO: Implement iterative deepening search */
+
+/** @TODO: Implement Greedy search (with at least two heuristics) */
+
+/** @TODO: Implement A* search (with at least two admissible heuristics) */
+
+export const generalSearch: (Problem, QueueingFunction) => Node | null = (
+  problem,
+  queueingFunction
+) => {
+  let nodes: Array<Node> = makeQueue(makeNode(initialState(problem)));
+  let history: Array<State> = [];
+  let expansionsCount: number = 0;
+  while (!_.isEmpty(nodes)) {
+    /** Guard against infinite loops */
+    if (expansionsCount++ === 10000) {
+      console.log('♻️ Infinite loop!');
+      break;
+    }
+    const [node] = _.pullAt(nodes, 0);
     if (goalTest(problem)(state(node))) {
       return node;
     }
-    nodes = queueingFunc(nodes, expand(node, operation(problem)));
+    nodes = queueingFunction(nodes, expand(node, problem, history));
+    history = _.uniq(history.concat(nodes.map(node => node.state)));
   }
-  return [];
+  return null;
 };
 
-/** @TODO: Implement queueing functions */
+export const retrace: Node => Array<Operator> = goalNode => {
+  // @TODO: Backtrack till search tree root node & construct sequence of operators that leads to goal node
+  return [];
+};

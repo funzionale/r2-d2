@@ -1,24 +1,16 @@
 /** @flow */
 
 import _ from 'lodash';
-import { types } from '.';
+import { items } from '.';
 
-type Dimensions = {
-  m: number,
-  n: number,
-};
+import type { Cell, Coordinates, Dimensions, Item } from '../flow';
 
-type Coordinates = {
-  x: number,
-  y: number,
-};
-
-const constructItem = (type: string) => (coordinates: Coordinates) => ({
-  ...coordinates,
-  type,
+const constructCell: (?Item) => Coordinates => Cell = item => coordinates => ({
+  items: item ? [item] : [],
+  coordinates,
 });
 
-export const constructGrid = ({ m, n }: Dimensions) =>
+export const constructGrid: Dimensions => Array<Coordinates> = ({ m, n }) =>
   _.chain(new Array(m))
     .fill(new Array(n))
     .map((innerArray, outerArrayIndex) =>
@@ -34,41 +26,44 @@ export const constructGrid = ({ m, n }: Dimensions) =>
     .sortBy(['y', 'x'])
     .value();
 
-export const populateGrid = (unallocatedGrid: Array<Coordinates>) => {
-  let allocatedGridCoordinates = [];
-  let randomIndex = 0;
-  let count = 0;
-  let item = {};
+export const populateGrid: (
+  Array<Coordinates>
+) => Array<Cell> = coordinates => {
+  const unallocatedGrid: Array<Coordinates> = _.cloneDeep(coordinates);
+  let allocatedGrid: Array<Cell> = [];
+  let randomCoordinates: Coordinates | null = null;
+  let randomIndex: number = 0;
+  let count: number = 0;
 
   randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
-  item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+  [randomCoordinates] = _.pullAt(unallocatedGrid, randomIndex);
 
-  allocatedGridCoordinates = allocatedGridCoordinates.concat(
-    constructItem(types.R2D2)(item)
+  allocatedGrid = allocatedGrid.concat(
+    constructCell(items.R2D2)(randomCoordinates)
   );
 
   randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
-  item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+  [randomCoordinates] = _.pullAt(unallocatedGrid, randomIndex);
 
-  allocatedGridCoordinates = allocatedGridCoordinates.concat(
-    constructItem(types.TELEPORTAL)(item)
+  allocatedGrid = allocatedGrid.concat(
+    constructCell(items.TELEPORTAL)(randomCoordinates)
   );
 
   count = Math.floor(_.random(1, Math.floor(unallocatedGrid.length / 2)));
 
   for (var i = 0; i < count; i++) {
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
-    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+    [randomCoordinates] = _.pullAt(unallocatedGrid, randomIndex);
 
-    allocatedGridCoordinates = allocatedGridCoordinates.concat(
-      constructItem(types.PAD)(item)
+    allocatedGrid = allocatedGrid.concat(
+      constructCell(items.PAD)(randomCoordinates)
     );
 
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
-    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+    [randomCoordinates] = _.pullAt(unallocatedGrid, randomIndex);
 
-    allocatedGridCoordinates = allocatedGridCoordinates.concat(
-      constructItem(types.ROCK)(item)
+    allocatedGrid = allocatedGrid.concat(
+      constructCell(items.ROCK)(randomCoordinates)
     );
   }
 
@@ -76,46 +71,32 @@ export const populateGrid = (unallocatedGrid: Array<Coordinates>) => {
 
   for (i = 0; i < count; i++) {
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
-    item = _.pullAt(unallocatedGrid, [randomIndex])[0];
+    [randomCoordinates] = _.pullAt(unallocatedGrid, randomIndex);
 
-    allocatedGridCoordinates = allocatedGridCoordinates.concat(
-      constructItem(types.OBSTACLE)(item)
+    allocatedGrid = allocatedGrid.concat(
+      constructCell(items.OBSTACLE)(randomCoordinates)
     );
   }
 
-  count = unallocatedGrid.length;
+  allocatedGrid = allocatedGrid.concat(unallocatedGrid.map(constructCell()));
+  allocatedGrid = _.sortBy(allocatedGrid, ['coordinates.y', 'coordinates.x']);
 
-  for (i = 0; i < count; i++) {
-    item = _.pullAt(unallocatedGrid, [0])[0];
-    allocatedGridCoordinates = allocatedGridCoordinates.concat(item);
-  }
-
-  allocatedGridCoordinates = _.orderBy(
-    allocatedGridCoordinates,
-    ['y', 'x'],
-    ['asc', 'asc']
-  );
-
-  return allocatedGridCoordinates;
+  return allocatedGrid;
 };
 
 export const generateRandomGrid = () => {
-  const FIXME_LATER = _.random(5, 10);
-  const gridDimensions = {
-    m: FIXME_LATER,
-    n: FIXME_LATER,
-  };
-
-  // const gridDimensions = {
-  //   m: 3,
-  //   n: 3,
+  // const gridDimensions: Dimensions = {
+  //   m: _.random(5, 10),
+  //   n: _.random(5, 10),
   // };
 
-  const unallocatedGrid = constructGrid(gridDimensions).map(
-    constructItem(types.EMPTY)
-  );
+  const gridDimensions: Dimensions = {
+    m: 3,
+    n: 3,
+  };
 
-  const allocatedGrid = populateGrid(unallocatedGrid);
+  const unallocatedGrid: Array<Coordinates> = constructGrid(gridDimensions);
+  const allocatedGrid: Array<Cell> = populateGrid(unallocatedGrid);
 
   return allocatedGrid;
 };
