@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import _ from 'lodash';
 import { rootReducer, actionCreators } from './redux';
 import { Grid } from './components';
 import {
@@ -52,15 +53,15 @@ class App extends Component<void, void> {
       let possibleNextStatesWithOperators: Array<StateWithOperator> = [];
 
       operators.forEach(appliedOperator => {
-        const grid: Array<Cell> | null = moveR2D2(
-          state.grid,
-          appliedOperator.name
-        );
+        const newGrid: Array<Cell> = moveR2D2(state.grid, appliedOperator.name);
 
-        if (grid) {
+        if (
+          /** Is there a state change? */
+          !_.isEqual(state.grid, newGrid)
+        ) {
           const possibleNextState: State = {
-            grid,
-            isTeleportalActivated: isTeleportalActivated(grid),
+            grid: newGrid,
+            isTeleportalActivated: isTeleportalActivated(newGrid),
           };
 
           const possibleStateWithOperator: StateWithOperator = {

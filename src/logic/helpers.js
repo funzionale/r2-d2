@@ -38,12 +38,12 @@ export const isTeleportalActivated: (Array<Cell>) => boolean = grid => {
   return cellsContainingPadsWithoutRocks.length === 0;
 };
 
-export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
+export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
   grid,
   operatorName
 ) => {
   const newGrid = _.cloneDeep(grid);
-  const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2); // @FIXME: Remove void
+  const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2);
 
   if (r2D2Cell) {
     const { coordinates: currentR2D2Coordinates } = r2D2Cell;
@@ -62,16 +62,20 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
             ? currentR2D2Coordinates.y + 1
             : currentR2D2Coordinates.y,
     });
-    // Destination cell is not a WALL
-    if (newR2D2Cell) {
+
+    if (
+      /** Is destination cell not a WALL? */
+      newR2D2Cell
+    ) {
       if (
-        // Destination cell is an OBSTACLE
+        /** Does destination cell contain an OBSTACLE? */
         doesCellContainItem(newR2D2Cell, items.OBSTACLE)
       ) {
-        // Do nothing
-        return null;
+        /** Do nothing */
       } else if (
-        // Destination cell is EMPTY or TELEPORTAL or only PAD
+        /** Is destination cell EMPTY
+         * or contains a TELEPORTAL
+         * or contains only a PAD? */
         isCellEmpty(newR2D2Cell) ||
         (newR2D2Cell.items.length === 1 &&
           doesCellContainItem(newR2D2Cell, items.PAD)) ||
@@ -80,7 +84,7 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
         newGrid.find(item => doesCellContainItem(item, items.R2D2)).items.pop();
         newR2D2Cell.items.push(items.R2D2);
       } else if (
-        // Destination cell contains ROCK
+        /** Does destination cell contain a ROCK? */
         newR2D2Cell.items.length === 1 &&
         doesCellContainItem(newR2D2Cell, items.ROCK)
       ) {
@@ -103,10 +107,9 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
           doesCellContainItem(cellNextToRock, items.OBSTACLE) ||
           doesCellContainItem(cellNextToRock, items.ROCK)
         ) {
-          // Do nothing
-          return null;
+          /** Do nothing */
         } else {
-          // Push ROCK towards EMPTY or PAD
+          /** Push ROCK towards EMPTY cell or cell containing PAD */
           newR2D2Cell.items.pop();
           cellNextToRock.items.push(items.ROCK);
 
