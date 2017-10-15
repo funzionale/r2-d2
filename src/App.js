@@ -9,6 +9,7 @@ import { Grid } from './components';
 import {
   generateRandomGrid,
   operators,
+  items,
   generalSearch,
   enqueueAtFront,
   enqueueAtEnd,
@@ -79,10 +80,10 @@ class App extends Component<void, void> {
     };
 
     const goalTest: State => boolean = state => {
-      const teleportalCell = findCellByItem(state.grid, 'TELEPORTAL');
+      const teleportalCell = findCellByItem(state.grid, items.TELEPORTAL);
       return Boolean(
         teleportalCell &&
-          doesCellContainItem(teleportalCell, 'R2D2') &&
+          doesCellContainItem(teleportalCell, items.R2D2) &&
           state.isTeleportalActivated
       );
     };

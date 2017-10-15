@@ -31,9 +31,9 @@ export const filterCellsByItem: (Array<Cell>, Item) => Array<Cell> = (
 ) => grid.filter(cell => doesCellContainItem(cell, item));
 
 export const isTeleportalActivated: (Array<Cell>) => boolean = grid => {
-  const cellsContainingPads = filterCellsByItem(grid, 'PAD');
+  const cellsContainingPads = filterCellsByItem(grid, items.PAD);
   const cellsContainingPadsWithoutRocks = cellsContainingPads.filter(
-    cell => !doesCellContainItem(cell, 'ROCK')
+    cell => !doesCellContainItem(cell, items.ROCK)
   );
   return cellsContainingPadsWithoutRocks.length === 0;
 };

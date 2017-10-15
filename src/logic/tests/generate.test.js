@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import items from '../items';
 import { constructGrid, populateGrid } from '../generate';
 
 /** constructGrid(): Trivial cases (empty grids: m === 0 || n === 0) */
@@ -71,9 +72,9 @@ test('constructGrid() with square grids: constructs grid of ascendingly sorted, 
 /** populateGrid() */
 test('populateGrid() does not allocate redundant R2D2s or TELEPORTALs', () => {
   const filterR2D2 = cell =>
-    cell.items.filter(item => item === 'R2D2').length === 1;
+    cell.items.filter(item => item === items.R2D2).length === 1;
   const filterTeleportal = cell =>
-    cell.items.filter(item => item === 'TELEPORTAL').length === 1;
+    cell.items.filter(item => item === items.TELEPORTAL).length === 1;
 
   for (let i = 0; i < 1000; i++) {
     const grid = populateGrid(
