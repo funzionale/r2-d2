@@ -107,7 +107,7 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
   grid,
   operatorName
 ) => {
-  const newGrid: Array<Cell> = _.cloneDeep(grid);
+  let newGrid: Array<Cell> = _.cloneDeep(grid);
   const r2D2Cell: Cell | void = findCellByItem(grid, items.R2D2);
 
   if (r2D2Cell) {
@@ -146,8 +146,13 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
           doesCellContainItem(newR2D2Cell, items.PAD)) ||
         doesCellContainItem(newR2D2Cell, items.TELEPORTAL)
       ) {
-        newGrid.find(item => doesCellContainItem(item, items.R2D2)).items.pop();
-        newR2D2Cell.items.push(items.R2D2);
+        /** Move R2D2 */
+        newGrid = moveItem(
+          newGrid,
+          r2D2Cell.coordinates,
+          newR2D2Cell.coordinates,
+          items.R2D2
+        );
       } else if (
         /** Does destination cell contain a ROCK? */
         newR2D2Cell.items.length === 1 &&
@@ -175,13 +180,20 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
           /** Do nothing */
         } else {
           /** Push ROCK towards EMPTY cell or cell containing PAD */
-          newR2D2Cell.items.pop();
-          cellNextToRock.items.push(items.ROCK);
+          newGrid = moveItem(
+            newGrid,
+            newR2D2Cell.coordinates,
+            cellNextToRock.coordinates,
+            items.ROCK
+          );
 
-          newGrid
-            .find(item => doesCellContainItem(item, items.R2D2))
-            .items.pop();
-          newR2D2Cell.items.push(items.R2D2);
+          /** Move R2D2 */
+          newGrid = moveItem(
+            newGrid,
+            r2D2Cell.coordinates,
+            newR2D2Cell.coordinates,
+            items.R2D2
+          );
         }
       }
     }
