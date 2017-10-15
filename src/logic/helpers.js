@@ -114,10 +114,11 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> | null = (
 
 export const isCellEmpty: Cell => boolean = cell => cell.items.length === 0;
 
-export const isTeleportalActivated = (grid: Array<Cell>): boolean => {
+export const isTeleportalActivated: (Array<Cell>) => boolean = grid => {
   const cellsContainingRocks = grid.filter(
     cell => cell.items.includes(items.ROCK) && !cell.items.includes(items.PAD)
   );
+
   return cellsContainingRocks.length === 0;
 };
 

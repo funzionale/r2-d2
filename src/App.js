@@ -40,48 +40,64 @@ class App extends Component<void, void> {
     const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
     this.store.dispatch(actionCreators.setGrid(randomlyGeneratedGrid));
 
+    const initialState: State = {
+      grid: randomlyGeneratedGrid,
+      isTeleportalActivated: false,
+    };
+
     const stateSpace: (State, Array<Operator>) => Array<StateWithOperator> = (
       state,
       operators
     ) => {
-      let possibleStateHistories = [];
+      let possibleNextStatesWithOperators: Array<StateWithOperator> = [];
 
-      operators.forEach(operator => {
-        const grid: Array<Cell> | null = moveR2D2(state.grid, operator.name);
+      operators.forEach(appliedOperator => {
+        const grid: Array<Cell> | null = moveR2D2(
+          state.grid,
+          appliedOperator.name
+        );
+
         if (grid) {
-          possibleStateHistories = possibleStateHistories.concat({
-            state: {
-              grid,
-              isTeleportalActivated: isTeleportalActivated(grid),
-            },
-            operator,
-          });
+          const possibleNextState: State = {
+            grid,
+            isTeleportalActivated: isTeleportalActivated(grid),
+          };
+
+          const possibleStateWithOperator: StateWithOperator = {
+            state: possibleNextState,
+            operator: appliedOperator,
+          };
+
+          possibleNextStatesWithOperators = possibleNextStatesWithOperators.concat(
+            possibleStateWithOperator
+          );
         }
       });
 
-      return possibleStateHistories;
+      return possibleNextStatesWithOperators;
     };
+
+    const goalTest: State => boolean = state => {
+      const teleportalCell = findCellByItem(state.grid, 'TELEPORTAL');
+      return Boolean(
+        teleportalCell &&
+          doesCellContainItem(teleportalCell, 'R2D2') &&
+          state.isTeleportalActivated
+      );
+    };
+
+    const pathCost: (Array<Operator>) => number = operators =>
+      operators.reduce(
+        (accumulator, operator) => accumulator + operator.cost,
+        0
+      );
 
     const problem: Problem = {
       operators,
-      initialState: {
-        grid: randomlyGeneratedGrid,
-        isTeleportalActivated: false,
-      },
+      initialState,
       stateSpace,
-      goalTest: state => {
-        const teleportalCell = findCellByItem(state.grid, 'TELEPORTAL');
-        return Boolean(
-          teleportalCell &&
-            doesCellContainItem(teleportalCell, 'R2D2') &&
-            state.isTeleportalActivated
-        );
-      },
-      pathCost: operators =>
-        operators.reduce(
-          (accumulator, operator) => accumulator + operator.cost,
-          0
-        ),
+      goalTest,
+      pathCost,
     };
 
     console.log(
