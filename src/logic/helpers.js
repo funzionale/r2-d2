@@ -40,6 +40,69 @@ export const isTeleportalActivated: (Array<Cell>) => boolean = grid => {
   return cellsContainingPadsWithoutRocks.length === 0;
 };
 
+export const moveItem: (
+  Array<Cell>,
+  Coordinates,
+  Coordinates,
+  Item
+) => Array<Cell> = (grid, sourceCoordinates, destinationCoordinates, item) => {
+  if (
+    sourceCoordinates.x === destinationCoordinates.x &&
+    sourceCoordinates.y === destinationCoordinates.y
+  ) {
+    throw new Error(
+      'moveItem(): Source & destination coordinates cannot be the same'
+    );
+  }
+
+  if (sourceCoordinates.x < 0 || sourceCoordinates.y < 0) {
+    throw new Error('moveItem(): Source coordinates cannot be negative');
+  }
+  if (destinationCoordinates.x < 0 || destinationCoordinates.y < 0) {
+    throw new Error('moveItem(): Destination coordinates cannot be negative');
+  }
+
+  const deltaX = Math.abs(destinationCoordinates.x - sourceCoordinates.x);
+  const deltaY = Math.abs(destinationCoordinates.y - sourceCoordinates.y);
+
+  if (deltaX > 1 || deltaY > 1) {
+    throw new Error('moveItem(): Cannot mobilize item for more than 1 step');
+  }
+  if (deltaX === 1 && deltaY === 1) {
+    throw new Error('moveItem(): Cannot mobilize item diagonally');
+  }
+
+  const newGrid = _.cloneDeep(grid);
+
+  const sourceCell: Cell | void = findCellByCoordinates(
+    newGrid,
+    sourceCoordinates
+  );
+  const destinationCell: Cell | void = findCellByCoordinates(
+    newGrid,
+    destinationCoordinates
+  );
+
+  if (!sourceCell) {
+    throw new Error('moveItem(): Source cell does not exist in the grid');
+  }
+  if (!destinationCell) {
+    throw new Error('moveItem(): Destination cell does not exist in the grid');
+  }
+  if (!doesCellContainItem(sourceCell, item)) {
+    throw new Error(
+      'moveItem(): Source cell does not contain the item required to mobilize'
+    );
+  }
+
+  /** Mutation: Remove item from source cell */
+  _.remove(sourceCell.items, cellItem => cellItem === item);
+  /** Mutation: Add item to destination cell */
+  destinationCell.items.push(item);
+
+  return newGrid;
+};
+
 export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
   grid,
   operatorName
