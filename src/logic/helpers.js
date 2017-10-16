@@ -72,8 +72,10 @@ export const moveItem: (
     throw new Error('moveItem(): Cannot mobilize item diagonally');
   }
 
+  //TODO: Improve performance
+  // const initDate = new Date();
   const newGrid = _.cloneDeep(grid);
-
+  // console.log('_.cloneDeep(grid)', (initDate - new Date()))
   const sourceCell: Cell | void = findCellByCoordinates(
     newGrid,
     sourceCoordinates
@@ -201,6 +203,9 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
 
   return newGrid;
 };
+
+export const sleep = (time: number = 2000) =>
+  new Promise(resolve => setTimeout(resolve, time));
 
 // @TODO: Convert 1D grid to 2D
 

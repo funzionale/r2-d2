@@ -17,4 +17,5 @@ export {
   filterCellsByItem,
   moveR2D2,
   isTeleportalActivated,
+  sleep,
 } from './helpers';

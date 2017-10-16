@@ -19,6 +19,7 @@ import {
   findCellByItem,
   moveR2D2,
   isTeleportalActivated,
+  sleep,
 } from './logic';
 
 import type {
@@ -38,7 +39,7 @@ class App extends Component<void, void> {
     this.store = createStore(rootReducer);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
     this.store.dispatch(actionCreators.setGrid(randomlyGeneratedGrid));
 
@@ -58,6 +59,7 @@ class App extends Component<void, void> {
 
         if (
           /** Is there a state change? */
+          //TODO: Improve performance
           !_.isEqual(state.grid, newGrid) ||
           isTeleportalActivated(newGrid) !== state.isTeleportalActivated
         ) {
@@ -115,21 +117,25 @@ class App extends Component<void, void> {
       JSON.stringify(problem.initialState, null, 2)
     );
     // const goalNode: Node | null = generalSearch(problem, enqueueAtFront);
-    // const goalNode: Node | null = generalSearch(problem, enqueueAtEnd);
+    const goalNode: Node | null = generalSearch(problem, enqueueAtEnd);
     // const goalNode: Node | null = generalSearch(problem, orderedInsert);
     console.log('🔎 Search ended!');
 
-    // if (goalNode) {
-    //   const operatorsSequence: Array<Operator> = retrace(goalNode);
-    //   console.log(
-    //     '✅ A solution was found!\n',
-    //     JSON.stringify(operatorsSequence)
-    //   );
-    // } else {
-    //   console.log(
-    //     '⛔ A solution for this problem using the specified queueing function cannot be found.'
-    //   );
-    // }
+    if (goalNode) {
+      const operatorsSequence: Array<Operator> = retrace(goalNode);
+      await sleep();
+
+      this.store.dispatch(actionCreators.setGrid(goalNode.state.grid));
+
+      console.log(
+        '✅ A solution was found!\n',
+        JSON.stringify(operatorsSequence)
+      );
+    } else {
+      console.log(
+        '⛔ A solution for this problem using the specified queueing function cannot be found.'
+      );
+    }
   }
 
   render() {

@@ -89,11 +89,13 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
     if (goalTest(problem)(state(node))) {
       return node;
     }
-    nodes = queueingFunction(nodes, expand(node, problem, history));
-    history = _.uniqWith(
-      history.concat(nodes.map(node => node.state)),
-      _.isEqual
-    );
+    const expandedNodes = expand(node, problem, history);
+    nodes = queueingFunction(nodes, expandedNodes);
+    // const initTime = new Date();
+
+    history = history.concat(expandedNodes.map(node => node.state));
+
+    // console.log('_.uniqWith(', new Date() - initTime);
   }
   return null;
 };
