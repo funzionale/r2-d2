@@ -58,7 +58,8 @@ class App extends Component<void, void> {
 
         if (
           /** Is there a state change? */
-          !_.isEqual(state.grid, newGrid)
+          !_.isEqual(state.grid, newGrid) ||
+          isTeleportalActivated(newGrid) !== state.isTeleportalActivated
         ) {
           const possibleNextState: State = {
             grid: newGrid,
@@ -98,6 +99,9 @@ class App extends Component<void, void> {
         0
       );
 
+    // const ops = _.cloneDeep(operators);
+    // ops[0].cost = 2;
+    // ops[1].cost =2;
     const problem: Problem = {
       operators,
       initialState,
