@@ -4,10 +4,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { Cell, Item } from '../flow';
 
-const Pad = () => <div>'PAD'</div>;
+const Pad = () => <img className="pad" src="./pad.svg" alt="Pad" />;
 const Rock = () => <img className="rock" src="./rock.png" alt="Rock" />;
-const Teleportal = () => <div>'TELEPORTAL'</div>;
-const Obstacle = () => <div>'OBSTACLE'</div>;
+const Teleportal = () => (
+  <img className="teleportal" src="./teleportal.png" alt="Teleportal" />
+);
+const Obstacle = () => <img className="wall" src="./wall.svg" alt="Wall" />;
 const R2D2 = () => <img className="r2d2" src="./R2D2.svg" alt="Robot" />;
 
 const Grid = ({ grid }: { grid: Array<Cell> }) => {
