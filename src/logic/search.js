@@ -49,7 +49,7 @@ const expand: (Node, Problem, Array<State>) => Array<Node> = (
       depth: parentNode.depth + 1,
       pathCost: parentNode.pathCost + problem.pathCost([operator]),
     }))
-    .filter(node => !history.includes(node.state));
+    .filter(node => !history.find(hist => _.isEqual(node.state, hist)));
 
   return childrenNodes;
 };
@@ -90,12 +90,16 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
       return node;
     }
     nodes = queueingFunction(nodes, expand(node, problem, history));
-    history = _.uniq(history.concat(nodes.map(node => node.state)));
+    history = _.uniqWith(
+      history.concat(nodes.map(node => node.state)),
+      _.isEqual
+    );
   }
   return null;
 };
 
 export const retrace: Node => Array<Operator> = goalNode => {
   // @TODO: Backtrack till search tree root node & construct sequence of operators that leads to goal node
+  console.log(goalNode);
   return [];
 };

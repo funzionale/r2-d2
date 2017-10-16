@@ -209,10 +209,3 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
 // export const isCellAdjacentToWall: Cell => boolean = () => {};
 
 // export const gridStats: Array<Cell> => Object = () => {};
-
-// export const moveItem: (
-//   Grid,
-//   Coordinates,
-//   Coordinates,
-//   Item,
-// ) => Grid = () => {};
