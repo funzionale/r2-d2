@@ -49,7 +49,7 @@ export const populateGrid: (
     constructCell(items.TELEPORTAL)(randomCoordinates)
   );
 
-  count = Math.floor(_.random(1, Math.floor(unallocatedGrid.length / 2)));
+  count = Math.floor(_.random(1, Math.floor(unallocatedGrid.length / 4)));
 
   for (var i = 0; i < count; i++) {
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
@@ -67,7 +67,7 @@ export const populateGrid: (
     );
   }
 
-  count = Math.floor(_.random(0, unallocatedGrid.length));
+  count = Math.floor(_.random(0, unallocatedGrid.length / 5));
 
   for (i = 0; i < count; i++) {
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
@@ -91,8 +91,8 @@ export const generateRandomGrid = () => {
   // };
 
   const gridDimensions: Dimensions = {
-    m: 5,
-    n: 5,
+    m: 4,
+    n: 4,
   };
 
   const unallocatedGrid: Array<Coordinates> = constructGrid(gridDimensions);

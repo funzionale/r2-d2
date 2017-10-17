@@ -66,7 +66,33 @@ export const enqueueAtEnd: QueueingFunction = (oldNodes, newNodes) =>
 export const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
   _.sortBy(oldNodes.concat(newNodes), 'pathCost');
 
-/** @TODO: Implement iterative deepening search */
+export const breadthFirst: Problem => Node | null = problem =>
+  generalSearch(problem, enqueueAtEnd);
+
+export const depthFirst: Problem => Node | null = problem =>
+  generalSearch(problem, enqueueAtFront);
+
+export const uniformCost: Problem => Node | null = problem =>
+  generalSearch(problem, orderedInsert);
+
+export const deepeningSearch: Problem => Node | null = problem => {
+  let l = 1;
+  while (l <= 30) {
+    const node = generalSearch(problem, enqueueAtFrontWithL(l));
+    if (node) {
+      return node;
+    }
+    l++;
+  }
+  return null;
+};
+
+const enqueueAtFrontWithL: number => QueueingFunction = l => (
+  oldNodes,
+  newNodes
+) => {
+  return newNodes.concat(oldNodes).filter(node => node.depth <= l);
+};
 
 /** @TODO: Implement Greedy search (with at least two heuristics) */
 
@@ -91,17 +117,16 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
     }
     const expandedNodes = expand(node, problem, history);
     nodes = queueingFunction(nodes, expandedNodes);
-    // const initTime = new Date();
-
     history = history.concat(expandedNodes.map(node => node.state));
-
-    // console.log('_.uniqWith(', new Date() - initTime);
   }
   return null;
 };
 
-export const retrace: Node => Array<Operator> = goalNode => {
-  // @TODO: Backtrack till search tree root node & construct sequence of operators that leads to goal node
-  console.log(goalNode);
-  return [];
+export const retrace: Node => Array<StateWithOperator> = goalNode => {
+  return trace(goalNode).map(({ state, operator }) => ({ state, operator }));
+};
+
+const trace: (Node | null) => Array<Node> = node => {
+  if (!node) return [];
+  return trace(node.parent).concat(node);
 };

@@ -29,7 +29,7 @@ export type State = {
 
 export type StateWithOperator = {
   state: State,
-  operator: Operator,
+  operator: Operator | null,
 };
 
 export type Node = {
