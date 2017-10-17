@@ -3,7 +3,6 @@
 import _ from 'lodash';
 
 import type {
-  Operator,
   Node,
   Problem,
   State,
@@ -55,15 +54,15 @@ const expand: (Node, Problem, Array<State>) => Array<Node> = (
 };
 
 /** Depth-first search */
-export const enqueueAtFront: QueueingFunction = (oldNodes, newNodes) =>
+const enqueueAtFront: QueueingFunction = (oldNodes, newNodes) =>
   newNodes.concat(oldNodes);
 
 /** Breadth-first search */
-export const enqueueAtEnd: QueueingFunction = (oldNodes, newNodes) =>
+const enqueueAtEnd: QueueingFunction = (oldNodes, newNodes) =>
   oldNodes.concat(newNodes);
 
 /** Uniform-cost search */
-export const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
+const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
   _.sortBy(oldNodes.concat(newNodes), 'pathCost');
 
 export const breadthFirst: Problem => Node | null = problem =>
@@ -90,13 +89,37 @@ export const deepeningSearch: Problem => Node | null = problem => {
 const enqueueAtFrontWithL: number => QueueingFunction = l => (
   oldNodes,
   newNodes
-) => {
-  return newNodes.concat(oldNodes).filter(node => node.depth <= l);
-};
+) => newNodes.concat(oldNodes).filter(node => node.depth <= l);
 
-/** @TODO: Implement Greedy search (with at least two heuristics) */
+export const greedySearch: (Problem, (Node) => number) => Node | null = (
+  problem,
+  heuristic
+) => generalSearch(problem, greedyInsert(heuristic));
 
-/** @TODO: Implement A* search (with at least two admissible heuristics) */
+export const aStarSearch: (Problem, Array<(Node) => number>) => Node | null = (
+  problem,
+  heuristics
+) => generalSearch(problem, aStarInsert(heuristics));
+
+const greedyInsert: Problem => QueueingFunction = heuristic => (
+  oldNodes,
+  newNodes
+) => _.sortBy(oldNodes.concat(newNodes), heuristic);
+
+const aStarInsert: Problem => QueueingFunction = heuristics => (
+  oldNodes,
+  newNodes
+) =>
+  _.sortBy(
+    oldNodes.concat(newNodes),
+    node =>
+      Math.max(
+        heuristics.reduce(
+          (maxSoFar, heuristic) => Math.max(maxSoFar, heuristic(node)),
+          0
+        )
+      ) + node.pathCost
+  );
 
 export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   problem,

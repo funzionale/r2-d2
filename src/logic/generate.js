@@ -67,7 +67,7 @@ export const populateGrid: (
     );
   }
 
-  count = Math.floor(_.random(0, unallocatedGrid.length / 5));
+  count = Math.floor(_.random(0, unallocatedGrid.length / 2));
 
   for (i = 0; i < count; i++) {
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));
@@ -91,8 +91,8 @@ export const generateRandomGrid = () => {
   // };
 
   const gridDimensions: Dimensions = {
-    m: 4,
-    n: 4,
+    m: 6,
+    n: 6,
   };
 
   const unallocatedGrid: Array<Coordinates> = constructGrid(gridDimensions);

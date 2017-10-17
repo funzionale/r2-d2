@@ -9,6 +9,8 @@ export {
   uniformCost,
   deepeningSearch,
   retrace,
+  greedySearch,
+  aStarSearch,
 } from './search';
 export {
   doesCellContainItem,

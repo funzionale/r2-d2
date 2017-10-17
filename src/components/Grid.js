@@ -81,7 +81,7 @@ const Grid = ({ grid }: { grid: Array<Cell> }) => {
               justifyContent: 'center',
               alignItems: 'center',
               transform: `translate(${translateX}px, ${translateY}px)`,
-              transition: 'translate 1s ease',
+              WebkitTransition: 'all 1s ease-in',
             }}
           >
             {comp}
