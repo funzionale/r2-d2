@@ -66,7 +66,30 @@ export const enqueueAtEnd: QueueingFunction = (oldNodes, newNodes) =>
 export const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
   _.sortBy(oldNodes.concat(newNodes), 'pathCost');
 
-/** @TODO: Implement iterative deepening search */
+export const breadthFirst: Problem => Node | null = problem =>
+  generalSearch(problem, enqueueAtEnd);
+
+export const depthFirst: Problem => Node | null = problem =>
+  generalSearch(problem, enqueueAtFront);
+
+export const uniformCost: Problem => Node | null = problem =>
+  generalSearch(problem, orderedInsert);
+
+export const deepeningSearch: Problem => Node | null = problem => {
+  let l = 0;
+  while (!false) {
+    const node = generalSearch(problem, enqueueAtFrontWithL(l));
+    if (node) {
+      return node;
+    }
+  }
+  return null;
+};
+
+const enqueueAtFrontWithL: number => QueueingFunction = l => (
+  oldNodes,
+  newNodes
+) => newNodes.concat(oldNodes).filter(node => node.depth <= l);
 
 /** @TODO: Implement Greedy search (with at least two heuristics) */
 
