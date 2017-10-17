@@ -96,8 +96,11 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   return null;
 };
 
-export const retrace: Node => Array<Operator> = goalNode => {
-  // @TODO: Backtrack till search tree root node & construct sequence of operators that leads to goal node
-  console.log(goalNode);
-  return [];
+export const retrace: Node => Array<StateWithOperator> = goalNode => {
+  return trace(goalNode).map(({ state, operator }) => ({ state, operator }));
+};
+
+const trace: (Node | null) => Array<Node> = node => {
+  if (!node) return [];
+  return trace(node.parent).concat(node);
 };

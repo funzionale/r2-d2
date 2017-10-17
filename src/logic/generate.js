@@ -67,7 +67,7 @@ export const populateGrid: (
     );
   }
 
-  count = Math.floor(_.random(0, unallocatedGrid.length));
+  count = Math.floor(_.random(0, unallocatedGrid.length / 2));
 
   for (i = 0; i < count; i++) {
     randomIndex = Math.floor(_.random(0, unallocatedGrid.length - 1));

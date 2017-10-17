@@ -121,14 +121,22 @@ class App extends Component<void, void> {
     console.log('🔎 Search ended!');
 
     if (goalNode) {
-      const operatorsSequence: Array<Operator> = retrace(goalNode);
-      await sleep();
+      const operatorsAndGridSequence: Array<StateWithOperator> = retrace(
+        goalNode
+      );
 
-      this.store.dispatch(actionCreators.setGrid(goalNode.state.grid));
+      for (let index = 0; index < operatorsAndGridSequence.length; index++) {
+        await sleep(1000);
+        this.store.dispatch(
+          actionCreators.setGrid(operatorsAndGridSequence[index].state.grid)
+        );
+      }
 
       console.log(
         '✅ A solution was found!\n',
-        JSON.stringify(operatorsSequence)
+        JSON.stringify(
+          operatorsAndGridSequence.map(({ state, operator }) => operator)
+        )
       );
     } else {
       console.log(
