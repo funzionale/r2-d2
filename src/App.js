@@ -11,6 +11,9 @@ import {
   operators,
   items,
   breadthFirst,
+  depthFirst,
+  uniformCost,
+  deepeningSearch,
   retrace,
   doesCellContainItem,
   findCellByItem,
@@ -29,7 +32,122 @@ import type {
 } from './flow';
 
 const runApp: ((any) => void) => Promise<void> = async dispatch => {
-  const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
+  // const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
+  // dispatch(actionCreators.setGrid(randomlyGeneratedGrid));
+  const randomlyGeneratedGrid = [
+    {
+      items: [],
+      coordinates: {
+        x: 0,
+        y: 0,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 1,
+        y: 0,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 2,
+        y: 0,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 3,
+        y: 0,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 0,
+        y: 1,
+      },
+    },
+    {
+      items: ['OBSTACLE'],
+      coordinates: {
+        x: 1,
+        y: 1,
+      },
+    },
+    {
+      items: ['ROCK'],
+      coordinates: {
+        x: 2,
+        y: 1,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 3,
+        y: 1,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 0,
+        y: 2,
+      },
+    },
+    {
+      items: ['R2D2'],
+      coordinates: {
+        x: 1,
+        y: 2,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 2,
+        y: 2,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 3,
+        y: 2,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 0,
+        y: 3,
+      },
+    },
+    {
+      items: ['TELEPORTAL'],
+      coordinates: {
+        x: 1,
+        y: 3,
+      },
+    },
+    {
+      items: ['PAD'],
+      coordinates: {
+        x: 2,
+        y: 3,
+      },
+    },
+    {
+      items: [],
+      coordinates: {
+        x: 3,
+        y: 3,
+      },
+    },
+  ];
   dispatch(actionCreators.setGrid(randomlyGeneratedGrid));
 
   const initialState: State = {
@@ -99,14 +217,18 @@ const runApp: ((any) => void) => Promise<void> = async dispatch => {
     JSON.stringify(problem.initialState, null, 2)
   );
   const goalNode: Node | null = breadthFirst(problem);
+  // const goalNode: Node | null = deepeningSearch(problem);
+  // const goalNode: Node | null = uniformCost(problem);
+  // const goalNode: Node | null = depthFirst(problem);
   console.log('🔎 Search ended!');
 
   if (goalNode) {
-    const operatorsSequence: Array<Operator> = retrace(goalNode);
-    await sleep();
+    const operatorsSequence: Array<StateWithOperator> = retrace(goalNode);
 
-    dispatch(actionCreators.setGrid(goalNode.state.grid));
-
+    for (let i = 0; i < operatorsSequence.length; i++) {
+      await sleep(500);
+      dispatch(actionCreators.setGrid(operatorsSequence[i].state.grid));
+    }
     console.log('✅ A solution was found!\n', JSON.stringify(operatorsSequence));
   } else {
     console.log(
