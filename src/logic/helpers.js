@@ -202,6 +202,9 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
   return newGrid;
 };
 
+export const sleep = (time: number = 2000) =>
+  new Promise(resolve => setTimeout(resolve, time));
+
 // @TODO: Convert 1D grid to 2D
 
 // export const inactivatedPadsCount: Array<Cell> => number = () => {};

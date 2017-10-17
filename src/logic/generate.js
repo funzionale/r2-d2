@@ -91,8 +91,8 @@ export const generateRandomGrid = () => {
   // };
 
   const gridDimensions: Dimensions = {
-    m: 3,
-    n: 3,
+    m: 5,
+    n: 5,
   };
 
   const unallocatedGrid: Array<Coordinates> = constructGrid(gridDimensions);
