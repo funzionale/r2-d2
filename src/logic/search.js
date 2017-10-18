@@ -65,6 +65,25 @@ const enqueueAtEnd: QueueingFunction = (oldNodes, newNodes) =>
 const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
   _.sortBy(oldNodes.concat(newNodes), 'pathCost');
 
+/** Deepening-iterative search */
+const enqueueAtFrontWithL: number => QueueingFunction = l => (
+  oldNodes,
+  newNodes
+) => newNodes.concat(oldNodes).filter(node => node.depth <= l);
+
+/** Greedy search */
+const greedyInsert: ((Node) => number) => QueueingFunction = heuristic => (
+  oldNodes,
+  newNodes
+) => _.sortBy(oldNodes.concat(newNodes), heuristic);
+
+/** A* search */
+const aStarInsert: ((Node) => number) => QueueingFunction = heuristic => (
+  oldNodes,
+  newNodes
+) =>
+  _.sortBy(oldNodes.concat(newNodes), node => heuristic(node) + node.pathCost);
+
 export const breadthFirst: Problem => Node | null = problem =>
   generalSearch(problem, enqueueAtEnd);
 
@@ -86,40 +105,15 @@ export const deepeningSearch: Problem => Node | null = problem => {
   return null;
 };
 
-const enqueueAtFrontWithL: number => QueueingFunction = l => (
-  oldNodes,
-  newNodes
-) => newNodes.concat(oldNodes).filter(node => node.depth <= l);
-
 export const greedySearch: (Problem, (Node) => number) => Node | null = (
   problem,
   heuristic
 ) => generalSearch(problem, greedyInsert(heuristic));
 
-export const aStarSearch: (Problem, Array<(Node) => number>) => Node | null = (
+export const aStarSearch: (Problem, (Node) => number) => Node | null = (
   problem,
-  heuristics
-) => generalSearch(problem, aStarInsert(heuristics));
-
-const greedyInsert: Problem => QueueingFunction = heuristic => (
-  oldNodes,
-  newNodes
-) => _.sortBy(oldNodes.concat(newNodes), heuristic);
-
-const aStarInsert: Problem => QueueingFunction = heuristics => (
-  oldNodes,
-  newNodes
-) =>
-  _.sortBy(
-    oldNodes.concat(newNodes),
-    node =>
-      Math.max(
-        heuristics.reduce(
-          (maxSoFar, heuristic) => Math.max(maxSoFar, heuristic(node)),
-          0
-        )
-      ) + node.pathCost
-  );
+  heuristic
+) => generalSearch(problem, aStarInsert(heuristic));
 
 export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   problem,
