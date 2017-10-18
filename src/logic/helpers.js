@@ -214,3 +214,233 @@ export const sleep = (time: number = 2000) =>
 // export const isCellAdjacentToWall: Cell => boolean = () => {};
 
 // export const gridStats: Array<Cell> => Object = () => {};
+
+export const generateSucceedingGrid = () => [
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 1,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 1,
+      y: 1,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 2,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 2,
+    },
+  },
+  {
+    items: ['R2D2'],
+    coordinates: {
+      x: 1,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 3,
+    },
+  },
+  {
+    items: ['TELEPORTAL'],
+    coordinates: {
+      x: 1,
+      y: 3,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 2,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 3,
+    },
+  },
+];
+
+export const generateFailingGrid = () => [
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 0,
+    },
+  },
+  {
+    items: ['R2D2'],
+    coordinates: {
+      x: 1,
+      y: 0,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 2,
+      y: 0,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 3,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 1,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 2,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 2,
+    },
+  },
+  {
+    items: ['TELEPORTAL'],
+    coordinates: {
+      x: 1,
+      y: 2,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 2,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 3,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 1,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 3,
+    },
+  },
+];
