@@ -22,6 +22,9 @@ import {
   moveR2D2,
   isTeleportalActivated,
   sleep,
+  generateSucceedingGrid,
+  generateSucceedingGridRockOnTel,
+  generateSucceedingGridPushRocksOnPads,
 } from './logic';
 
 import type {
@@ -50,17 +53,12 @@ const runApp: ((any) => void) => Promise<void> = async dispatch => {
     let possibleNextStatesWithOperators: Array<StateWithOperator> = [];
 
     operators.forEach(appliedOperator => {
-      const newGrid: Array<Cell> | null = moveR2D2(
-        state.grid,
-        appliedOperator.name
-      );
+      const newGrid: Array<Cell> = moveR2D2(state.grid, appliedOperator.name);
 
       if (
         /** Is there a state change? */
-        !newGrid ||
         !_.isEqual(state.grid, newGrid) ||
-        (newGrid !== null &&
-          isTeleportalActivated(newGrid) !== state.isTeleportalActivated)
+        isTeleportalActivated(newGrid) !== state.isTeleportalActivated
       ) {
         const possibleNextState: State = {
           grid: newGrid,

@@ -20,4 +20,7 @@ export {
   moveR2D2,
   isTeleportalActivated,
   sleep,
+  generateSucceedingGrid,
+  generateSucceedingGridRockOnTel,
+  generateSucceedingGridPushRocksOnPads,
 } from './helpers';

@@ -72,10 +72,7 @@ export const moveItem: (
     throw new Error('moveItem(): Cannot mobilize item diagonally');
   }
 
-  //TODO: Improve performance
-  // const initDate = new Date();
   const newGrid = _.cloneDeep(grid);
-  // console.log('_.cloneDeep(grid)', (initDate - new Date()))
   const sourceCell: Cell | void = findCellByCoordinates(
     newGrid,
     sourceCoordinates
@@ -141,12 +138,12 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
         /** Do nothing */
       } else if (
         /** Is destination cell EMPTY
-         * or contains a TELEPORTAL
+         * or contains only a TELEPORTAL
          * or contains only a PAD? */
         isCellEmpty(newR2D2Cell) ||
         (newR2D2Cell.items.length === 1 &&
-          doesCellContainItem(newR2D2Cell, items.PAD)) ||
-        doesCellContainItem(newR2D2Cell, items.TELEPORTAL)
+          (doesCellContainItem(newR2D2Cell, items.PAD) ||
+            doesCellContainItem(newR2D2Cell, items.TELEPORTAL)))
       ) {
         /** Move R2D2 */
         newGrid = moveItem(
@@ -157,7 +154,6 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
         );
       } else if (
         /** Does destination cell contain a ROCK? */
-        newR2D2Cell.items.length === 1 &&
         doesCellContainItem(newR2D2Cell, items.ROCK)
       ) {
         const cellNextToRock: Cell | void = findCellByCoordinates(newGrid, {
@@ -330,7 +326,7 @@ export const generateSucceedingGrid = () => [
   },
 ];
 
-export const generateFailingGrid = () => [
+export const generateSucceedingGridRockOnTel = () => [
   {
     items: [],
     coordinates: {
@@ -438,6 +434,121 @@ export const generateFailingGrid = () => [
   },
   {
     items: [],
+    coordinates: {
+      x: 3,
+      y: 3,
+    },
+  },
+];
+
+export const generateSucceedingGridPushRocksOnPads = () => [
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 0,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 2,
+      y: 0,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 3,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 1,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 2,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 1,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 0,
+      y: 2,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 1,
+      y: 2,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 2,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 2,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 0,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 3,
+    },
+  },
+  {
+    items: ['R2D2'],
+    coordinates: {
+      x: 2,
+      y: 3,
+    },
+  },
+  {
+    items: ['TELEPORTAL'],
     coordinates: {
       x: 3,
       y: 3,
