@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { get1DArrayDimensions } from '../logic';
 import type { Cell, Item } from '../flow';
 
 const Pad = () => <img className="pad" src="./pad.svg" alt="Pad" />;
@@ -13,15 +14,16 @@ const Obstacle = () => <img className="wall" src="./wall.svg" alt="Wall" />;
 const R2D2 = () => <img className="r2d2" src="./R2D2.svg" alt="Robot" />;
 
 const Grid = ({ grid }: { grid: Array<Cell> }) => {
-  const numOfRows = Math.sqrt(grid.length);
-  const widthAndHeight = Math.floor(100 / numOfRows);
+  const { m, n } = get1DArrayDimensions(grid);
+  const width = Math.floor(100 / m);
+  const height = Math.floor(100 / n);
   return grid.map(gridCell => [
     <div
       style={{
-        width: `${widthAndHeight}%`,
-        maxWidth: `${widthAndHeight}%`,
-        height: `${widthAndHeight}%`,
-        maxHeight: `${widthAndHeight}%`,
+        width: `${width}%`,
+        maxWidth: `${width}%`,
+        height: `${height}%`,
+        maxHeight: `${height}%`,
         padding: 4,
         boxSizing: 'border-box',
       }}
@@ -38,10 +40,10 @@ const Grid = ({ grid }: { grid: Array<Cell> }) => {
     </div>,
     [
       gridCell.items.map((item: Item) => {
-        const translateX = 600 / numOfRows * gridCell.coordinates.x;
-        const translateY = 600 / numOfRows * gridCell.coordinates.y;
-        const width = `${Math.floor(100 / numOfRows)}%`;
-        const height = `${Math.floor(100 / numOfRows)}%`;
+        const translateX = 600 / m * gridCell.coordinates.x;
+        const translateY = 600 / n * gridCell.coordinates.y;
+        const width = `${Math.floor(100 / m)}%`;
+        const height = `${Math.floor(100 / n)}%`;
         let comp;
         let zIndex = 0;
         switch (item) {

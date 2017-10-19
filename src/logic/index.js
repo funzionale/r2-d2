@@ -23,4 +23,5 @@ export {
   generateSucceedingGrid,
   generateSucceedingGridRockOnTel,
   generateSucceedingGridPushRocksOnPads,
+  get1DArrayDimensions,
 } from './helpers';

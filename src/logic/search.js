@@ -8,6 +8,8 @@ import type {
   State,
   StateWithOperator,
   QueueingFunction,
+  SearchReturn,
+  Heuristic,
 } from '../flow';
 
 const initialState: Problem => State = problem => problem.initialState;
@@ -72,50 +74,55 @@ const enqueueAtFrontWithL: number => QueueingFunction = l => (
 ) => newNodes.concat(oldNodes).filter(node => node.depth <= l);
 
 /** Greedy search */
-const greedyInsert: ((Node) => number) => QueueingFunction = heuristic => (
+const greedyInsert: Heuristic => QueueingFunction = heuristic => (
   oldNodes,
   newNodes
 ) => _.sortBy(oldNodes.concat(newNodes), heuristic);
 
 /** A* search */
-const aStarInsert: ((Node) => number) => QueueingFunction = heuristic => (
+const aStarInsert: Heuristic => QueueingFunction = heuristic => (
   oldNodes,
   newNodes
 ) =>
   _.sortBy(oldNodes.concat(newNodes), node => heuristic(node) + node.pathCost);
 
-export const breadthFirst: Problem => Node | null = problem =>
+export const breadthFirst: Problem => SearchReturn = problem =>
   generalSearch(problem, enqueueAtEnd);
 
-export const depthFirst: Problem => Node | null = problem =>
+export const depthFirst: Problem => SearchReturn = problem =>
   generalSearch(problem, enqueueAtFront);
 
-export const uniformCost: Problem => Node | null = problem =>
+export const uniformCost: Problem => SearchReturn = problem =>
   generalSearch(problem, orderedInsert);
 
-export const deepeningSearch: Problem => Node | null = problem => {
+export const deepeningSearch: Problem => SearchReturn = problem => {
   let l = 1;
+  let totalExpansionsCount = 0;
   while (l <= 30) {
-    const node = generalSearch(problem, enqueueAtFrontWithL(l));
-    if (node) {
-      return node;
+    const intermediate = generalSearch(problem, enqueueAtFrontWithL(l));
+    totalExpansionsCount += intermediate.expansionsCount;
+    if (intermediate.goalNode) {
+      return {
+        goalNode: intermediate.goalNode,
+        expansionsCount: totalExpansionsCount,
+      };
     }
     l++;
   }
-  return null;
+  return { expansionsCount: totalExpansionsCount, goalNode: null };
 };
 
-export const greedySearch: (Problem, (Node) => number) => Node | null = (
+export const greedySearch: (Problem, Heuristic) => SearchReturn = (
   problem,
   heuristic
 ) => generalSearch(problem, greedyInsert(heuristic));
 
-export const aStarSearch: (Problem, (Node) => number) => Node | null = (
+export const aStarSearch: (Problem, Heuristic) => SearchReturn = (
   problem,
   heuristic
 ) => generalSearch(problem, aStarInsert(heuristic));
 
-export const generalSearch: (Problem, QueueingFunction) => Node | null = (
+export const generalSearch: (Problem, QueueingFunction) => SearchReturn = (
   problem,
   queueingFunction
 ) => {
@@ -124,19 +131,20 @@ export const generalSearch: (Problem, QueueingFunction) => Node | null = (
   let expansionsCount: number = 0;
   while (!_.isEmpty(nodes)) {
     /** Guard against infinite loops */
-    if (expansionsCount++ === 10000) {
+    if (expansionsCount === 10000) {
       console.log('♻️ Infinite loop!');
       break;
     }
+    expansionsCount++;
     const [node] = _.pullAt(nodes, 0);
     if (goalTest(problem)(state(node))) {
-      return node;
+      return { goalNode: node, expansionsCount };
     }
     const expandedNodes = expand(node, problem, history);
     nodes = queueingFunction(nodes, expandedNodes);
     history = history.concat(expandedNodes.map(node => node.state));
   }
-  return null;
+  return { expansionsCount, goalNode: null };
 };
 
 export const retrace: Node => Array<StateWithOperator> = goalNode => {

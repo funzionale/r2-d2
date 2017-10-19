@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import items from './items';
 
-import type { Cell, Coordinates, Item } from '../flow';
+import type { Cell, Coordinates, Item, Dimensions } from '../flow';
 
 export const isCellEmpty: Cell => boolean = cell => cell.items.length === 0;
 
@@ -200,16 +200,18 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
   return newGrid;
 };
 
-export const sleep = (time: number = 2000) =>
+export const sleep: number => Promise<void> = (time: number = 2000) =>
   new Promise(resolve => setTimeout(resolve, time));
 
-// @TODO: Convert 1D grid to 2D
-
-// export const inactivatedPadsCount: Array<Cell> => number = () => {};
-
-// export const isCellAdjacentToWall: Cell => boolean = () => {};
-
-// export const gridStats: Array<Cell> => Object = () => {};
+// Convert 1D grid to 2D
+export const get1DArrayDimensions: (Array<Cell>) => Dimensions = grid =>
+  grid.reduce(
+    (maxSoFar, cell) => ({
+      m: Math.max(maxSoFar.m, cell.coordinates.x + 1),
+      n: Math.max(maxSoFar.n, cell.coordinates.y + 1),
+    }),
+    { m: 0, n: 0 }
+  );
 
 export const generateSucceedingGrid = () => [
   {

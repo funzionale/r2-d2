@@ -85,15 +85,15 @@ export const populateGrid: (
 };
 
 export const generateRandomGrid = () => {
-  // const gridDimensions: Dimensions = {
-  //   m: _.random(5, 10),
-  //   n: _.random(5, 10),
-  // };
-
   const gridDimensions: Dimensions = {
-    m: 4,
-    n: 4,
+    m: _.random(3, 6),
+    n: _.random(3, 6),
   };
+
+  // const gridDimensions: Dimensions = {
+  //   m: 4,
+  //   n: 4,
+  // };
 
   const unallocatedGrid: Array<Coordinates> = constructGrid(gridDimensions);
   const allocatedGrid: Array<Cell> = populateGrid(unallocatedGrid);
