@@ -2,6 +2,8 @@
 
 export type Item = 'R2D2' | 'TELEPORTAL' | 'OBSTACLE' | 'ROCK' | 'PAD';
 
+export type QFunc = 'BF' | 'DF' | 'UC' | 'ID' | 'GR1' | 'GR2' | 'AS1' | 'AS2';
+
 export type Operator = {
   name: 'NORTH' | 'SOUTH' | 'EAST' | 'WEST',
   cost: number,
