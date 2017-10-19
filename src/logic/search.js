@@ -12,6 +12,8 @@ import type {
   Heuristic,
 } from '../flow';
 
+const MAX_DEPTH = 30;
+
 const initialState: Problem => State = problem => problem.initialState;
 
 const makeNode: State => Node = state => ({
@@ -98,7 +100,7 @@ export const uniformCost: Problem => SearchReturn = problem =>
 export const deepeningSearch: Problem => SearchReturn = problem => {
   let l = 1;
   let totalExpansionsCount = 0;
-  while (l <= 30) {
+  while (l <= MAX_DEPTH) {
     const intermediate = generalSearch(problem, enqueueAtFrontWithL(l));
     totalExpansionsCount += intermediate.expansionsCount;
     if (intermediate.goalNode) {

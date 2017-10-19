@@ -557,3 +557,216 @@ export const generateSucceedingGridPushRocksOnPads = () => [
     },
   },
 ];
+
+export const generateAwesomeGrid = () => [
+  {
+    items: ['R2D2'],
+    coordinates: {
+      x: 0,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 5,
+      y: 0,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 0,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 1,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 2,
+      y: 1,
+    },
+  },
+  {
+    items: ['TELEPORTAL'],
+    coordinates: {
+      x: 3,
+      y: 1,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 4,
+      y: 1,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 5,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 2,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 3,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 2,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 5,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 3,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 1,
+      y: 3,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 2,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 3,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 5,
+      y: 3,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 0,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 4,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 3,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 5,
+      y: 4,
+    },
+  },
+];

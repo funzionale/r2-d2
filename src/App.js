@@ -5,8 +5,7 @@ import _ from 'lodash';
 import { store, actionCreators } from './redux';
 import {
   generateRandomGrid,
-  generateSucceedingGridPushRocksOnPads,
-  generateSucceedingGrid,
+  generateAwesomeGrid,
   operators,
   items,
   breadthFirst,
@@ -86,7 +85,7 @@ const pathCost: (Array<Operator | null>) => number = operators =>
   operators.reduce((accumulator, operator) => accumulator + operator.cost, 0);
 
 /** block distance to teleportal */
-export const heuristic: Node => number = node => {
+export const heuristic1: Node => number = node => {
   const state = node.state;
   const r2d2Cell: Cell | void = findCellByItem(state.grid, items.R2D2);
   const teleportalCell: Cell | void = findCellByItem(
@@ -104,7 +103,12 @@ export const heuristic: Node => number = node => {
 
 /** block distance to teleportal + rocks numberleft*/
 export const heuristic2: Node => number = node =>
-  heuristic(node) +
+  heuristic1(node) +
+  filterCellsByItem(node.state.grid, items.PAD).filter(
+    cell => !doesCellContainItem(cell, items.ROCK)
+  ).length;
+
+export const heuristic3: Node => number = node =>
   filterCellsByItem(node.state.grid, items.PAD).filter(
     cell => !doesCellContainItem(cell, items.ROCK)
   ).length;
@@ -124,7 +128,7 @@ const visualizeFunc: (
 
 export default () => {
   // const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
-  const randomlyGeneratedGrid: Array<Cell> = generateSucceedingGrid();
+  const randomlyGeneratedGrid: Array<Cell> = generateAwesomeGrid();
 
   const initialState: State = {
     grid: randomlyGeneratedGrid,
@@ -170,16 +174,16 @@ export default () => {
         result = deepeningSearch(problem);
         break;
       case 'GR1':
-        result = greedySearch(problem, heuristic);
+        result = greedySearch(problem, heuristic1);
         break;
       case 'GR2':
         result = greedySearch(problem, heuristic2);
         break;
       case 'AS1':
-        result = aStarSearch(problem, heuristic);
+        result = aStarSearch(problem, heuristic1);
         break;
       case 'AS2':
-        result = aStarSearch(problem, heuristic2);
+        result = aStarSearch(problem, heuristic3);
         break;
       default:
         return null;
