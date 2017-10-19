@@ -4,8 +4,23 @@
 
 <h1 align="center">R2-D2</h1>
 
+## Prerequisites
+
+* [Node](https://nodejs.org/en/download) `>= v6.0`
+
 ## Usage
 
+Install
 ```
-$ yarn && yarn start
+$ npm install
+```
+
+Run
+```
+$ npm start
+```
+
+Test
+```
+$ npm test
 ```
