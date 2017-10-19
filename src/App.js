@@ -127,8 +127,7 @@ const visualizeFunc: (
 };
 
 export default () => {
-  // const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
-  const randomlyGeneratedGrid: Array<Cell> = generateAwesomeGrid();
+  const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
 
   const initialState: State = {
     grid: randomlyGeneratedGrid,

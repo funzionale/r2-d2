@@ -87,7 +87,7 @@ export const populateGrid: (
 export const generateRandomGrid = () => {
   const gridDimensions: Dimensions = {
     m: _.random(3, 6),
-    n: _.random(3, 5),
+    n: _.random(3, 6),
   };
 
   // const gridDimensions: Dimensions = {
