@@ -23,4 +23,5 @@ export {
   generateSucceedingGrid,
   generateSucceedingGridRockOnTel,
   generateSucceedingGridPushRocksOnPads,
+  generateAwesomeGrid,
 } from './helpers';

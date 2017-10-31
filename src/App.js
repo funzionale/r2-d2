@@ -23,9 +23,7 @@ import {
   moveR2D2,
   isTeleportalActivated,
   sleep,
-  generateSucceedingGrid,
-  generateSucceedingGridRockOnTel,
-  generateSucceedingGridPushRocksOnPads,
+  generateAwesomeGrid,
 } from './logic';
 
 import type {
