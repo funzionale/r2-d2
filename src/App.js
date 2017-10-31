@@ -6,10 +6,10 @@ import {
   generateRandomGrid,
   operators,
   items,
-  breadthFirst,
-  depthFirst,
-  uniformCost,
-  deepeningSearch,
+  breadthFirstSearch,
+  depthFirstSearch,
+  uniformCostSearch,
+  deepIterativeSearch,
   greedySearch,
   aStarSearch,
   retrace,
@@ -148,10 +148,10 @@ export default () => {
     JSON.stringify(problem.initialState, null, 2)
   );
 
-  const goalNode: Node | null = breadthFirst(problem);
-  // const goalNode: Node | null = uniformCost(problem);
-  // const goalNode: Node | null = depthFirst(problem);
-  // const goalNode: Node | null = deepeningSearch(problem);
+  const goalNode: Node | null = breadthFirstSearch(problem);
+  // const goalNode: Node | null = uniformCostSearch(problem);
+  // const goalNode: Node | null = depthFirstSearch(problem);
+  // const goalNode: Node | null = deepIterativeSearch(problem, 30);
   // const goalNode: Node | null = greedySearch(problem, heuristic1);
   // const goalNode: Node | null = aStarSearch(problem, heuristic1);
   console.log('🔎 Search ended!');

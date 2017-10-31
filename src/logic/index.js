@@ -4,13 +4,13 @@ export { default as items } from './items';
 export { default as operators } from './operators';
 export { generateRandomGrid } from './generate';
 export {
-  breadthFirst,
-  depthFirst,
-  uniformCost,
-  deepeningSearch,
-  retrace,
+  breadthFirstSearch,
+  depthFirstSearch,
+  uniformCostSearch,
+  deepIterativeSearch,
   greedySearch,
   aStarSearch,
+  retrace,
 } from './search';
 export {
   doesCellContainItem,
