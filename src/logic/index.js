@@ -20,6 +20,7 @@ export {
   moveR2D2,
   isTeleportalActivated,
   sleep,
+  get1DArrayDimensions,
   generateSucceedingGrid,
   generateSucceedingGridRockOnTel,
   generateSucceedingGridPushRocksOnPads,
