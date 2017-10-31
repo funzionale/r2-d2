@@ -19,6 +19,7 @@ import {
   retrace,
   doesCellContainItem,
   findCellByItem,
+  filterCellsByItem,
   moveR2D2,
   isTeleportalActivated,
   sleep,
@@ -104,7 +105,35 @@ const runApp: ((any) => void) => Promise<void> = async dispatch => {
     pathCost,
   };
 
-  const heuristic: Node => number = node => 2;
+  /** block distance to teleportal */
+  const heuristic1: Node => number = node => {
+    const state = node.state;
+    const r2d2Cell: Cell | void = findCellByItem(state.grid, items.R2D2);
+    const teleportalCell: Cell | void = findCellByItem(
+      state.grid,
+      items.TELEPORTAL
+    );
+    if (r2d2Cell && teleportalCell) {
+      return (
+        Math.abs(r2d2Cell.coordinates.x - teleportalCell.coordinates.x) +
+        Math.abs(r2d2Cell.coordinates.y - teleportalCell.coordinates.y)
+      );
+    }
+    return 0;
+  };
+
+  /** block distance to teleportal + rocks numberleft*/
+  const heuristic2: Node => number = node =>
+    heuristic1(node) +
+    filterCellsByItem(node.state.grid, items.PAD).filter(
+      cell => !doesCellContainItem(cell, items.ROCK)
+    ).length;
+
+  /** rocks numberleft*/
+  const heuristic3: Node => number = node =>
+    filterCellsByItem(node.state.grid, items.PAD).filter(
+      cell => !doesCellContainItem(cell, items.ROCK)
+    ).length;
 
   console.log(
     '🔎 Search started\n0️⃣ Initial state:\n',
@@ -114,8 +143,8 @@ const runApp: ((any) => void) => Promise<void> = async dispatch => {
   // const goalNode: Node | null = uniformCost(problem);
   // const goalNode: Node | null = depthFirst(problem);
   // const goalNode: Node | null = deepeningSearch(problem);
-  // const goalNode: Node | null = greedySearch(problem, heuristic);
-  // const goalNode: Node | null = aStarSearch(problem, [heuristic]);
+  // const goalNode: Node | null = greedySearch(problem, heuristic1);
+  // const goalNode: Node | null = aStarSearch(problem, heuristic1);
   console.log('🔎 Search ended!');
 
   if (goalNode) {
