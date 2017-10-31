@@ -92,7 +92,7 @@ const runApp: ((any) => void) => Promise<void> = async dispatch => {
     );
   };
 
-  const pathCost: (Array<Operator>) => number = operators =>
+  const pathCost: (Array<Operator | null>) => number = operators =>
     operators.reduce((accumulator, operator) => accumulator + operator.cost, 0);
 
   const problem: Problem = {

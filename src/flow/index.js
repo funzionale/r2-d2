@@ -45,7 +45,9 @@ export type Problem = {
   initialState: State,
   stateSpace: (State, Array<Operator>) => Array<StateWithOperator>,
   goalTest: State => boolean,
-  pathCost: (Array<Operator>) => number,
+  pathCost: (Array<Operator | null>) => number,
 };
 
 export type QueueingFunction = (Array<Node>, Array<Node>) => Array<Node>;
+
+export type Heuristic = Node => number;

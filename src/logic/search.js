@@ -8,6 +8,7 @@ import type {
   State,
   StateWithOperator,
   QueueingFunction,
+  Heuristic,
 } from '../flow';
 
 const initialState: Problem => State = problem => problem.initialState;
@@ -72,13 +73,13 @@ const enqueueAtFrontWithL: number => QueueingFunction = l => (
 ) => newNodes.concat(oldNodes).filter(node => node.depth <= l);
 
 /** Greedy search */
-const greedyInsert: ((Node) => number) => QueueingFunction = heuristic => (
+const greedyInsert: Heuristic => QueueingFunction = heuristic => (
   oldNodes,
   newNodes
 ) => _.sortBy(oldNodes.concat(newNodes), heuristic);
 
 /** A* search */
-const aStarInsert: ((Node) => number) => QueueingFunction = heuristic => (
+const aStarInsert: Heuristic => QueueingFunction = heuristic => (
   oldNodes,
   newNodes
 ) =>
@@ -105,12 +106,12 @@ export const deepeningSearch: Problem => Node | null = problem => {
   return null;
 };
 
-export const greedySearch: (Problem, (Node) => number) => Node | null = (
+export const greedySearch: (Problem, Heuristic) => Node | null = (
   problem,
   heuristic
 ) => generalSearch(problem, greedyInsert(heuristic));
 
-export const aStarSearch: (Problem, (Node) => number) => Node | null = (
+export const aStarSearch: (Problem, Heuristic) => Node | null = (
   problem,
   heuristic
 ) => generalSearch(problem, aStarInsert(heuristic));
