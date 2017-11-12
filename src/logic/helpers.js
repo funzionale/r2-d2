@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import items from './items';
 
-import type { Cell, Coordinates, Item } from '../flow';
+import type { Cell, Coordinates, Item, Dimensions } from '../flow';
 
 export const isCellEmpty: Cell => boolean = cell => cell.items.length === 0;
 
@@ -200,16 +200,18 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
   return newGrid;
 };
 
-export const sleep = (time: number = 2000) =>
+export const sleep: number => Promise<void> = (time: number = 2000) =>
   new Promise(resolve => setTimeout(resolve, time));
 
-// @TODO: Convert 1D grid to 2D
-
-// export const inactivatedPadsCount: Array<Cell> => number = () => {};
-
-// export const isCellAdjacentToWall: Cell => boolean = () => {};
-
-// export const gridStats: Array<Cell> => Object = () => {};
+/** Get m & n of 1D grid */
+export const get1DGridDimensions: (Array<Cell>) => Dimensions = grid =>
+  grid.reduce(
+    (maxSoFar, cell) => ({
+      m: Math.max(maxSoFar.m, cell.coordinates.x + 1),
+      n: Math.max(maxSoFar.n, cell.coordinates.y + 1),
+    }),
+    { m: 0, n: 0 }
+  );
 
 export const generateSucceedingGrid = () => [
   {
@@ -552,6 +554,219 @@ export const generateSucceedingGridPushRocksOnPads = () => [
     coordinates: {
       x: 3,
       y: 3,
+    },
+  },
+];
+
+export const generateAwesomeGrid = () => [
+  {
+    items: ['R2D2'],
+    coordinates: {
+      x: 0,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 0,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 5,
+      y: 0,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 0,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 1,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 2,
+      y: 1,
+    },
+  },
+  {
+    items: ['TELEPORTAL'],
+    coordinates: {
+      x: 3,
+      y: 1,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 4,
+      y: 1,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 5,
+      y: 1,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 2,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 3,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 2,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 5,
+      y: 2,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 0,
+      y: 3,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 1,
+      y: 3,
+    },
+  },
+  {
+    items: ['ROCK'],
+    coordinates: {
+      x: 2,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 3,
+      y: 3,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 3,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 5,
+      y: 3,
+    },
+  },
+  {
+    items: ['OBSTACLE'],
+    coordinates: {
+      x: 0,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 1,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 2,
+      y: 4,
+    },
+  },
+  {
+    items: ['PAD'],
+    coordinates: {
+      x: 3,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 4,
+      y: 4,
+    },
+  },
+  {
+    items: [],
+    coordinates: {
+      x: 5,
+      y: 4,
     },
   },
 ];
