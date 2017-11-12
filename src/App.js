@@ -118,6 +118,11 @@ const populateInitialGrid: (Array<Cell>) => void = grid =>
 const populateInitialKnowledgeBase: (Array<string>) => void = facts =>
   store.dispatch(actionCreators.setKnowledgeBase(facts));
 
+const queryKnowledgeBase: string => string = query => {
+  const currentKnowledgeBase = store.getState().data.knowledgeBase;
+  // TODO
+};
+
 const visualize: (
   Array<StateWithOperator>
 ) => Promise<void> = async retraced => {
@@ -149,6 +154,11 @@ export default () => {
   populateInitialKnowledgeBase(
     transformGridToPrologFacts(randomlyGeneratedGrid)
   );
+
+  console.log(transformGridToPrologFacts(randomlyGeneratedGrid));
+  console.log(queryKnowledgeBase('cell(0, 0, X)'));
+
+  return;
 
   console.log(
     '🔎 Search started!\n0️⃣ Initial state:\n',

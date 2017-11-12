@@ -2,7 +2,7 @@
 
 export { default as items } from './items';
 export { default as operators } from './operators';
-export { generateRandomGrid, transformGridToPrologFacts } from './generate';
+export { generateRandomGrid } from './generate';
 export {
   breadthFirstSearch,
   depthFirstSearch,
@@ -26,3 +26,4 @@ export {
   generateSucceedingGridPushRocksOnPads,
   generateAwesomeGrid,
 } from './helpers';
+export { transformGridToPrologFacts } from './prolog';

@@ -95,13 +95,3 @@ export const generateRandomGrid: () => Array<Cell> = () => {
 
   return allocatedGrid;
 };
-
-export const transformGridToPrologFacts: (
-  Array<Cell>
-) => Array<string> = grid =>
-  grid.map(
-    cell =>
-      `cell(${cell.coordinates.x}, ${cell.coordinates.y}, ${JSON.stringify(
-        cell.items
-      ).replace(/"/g, "'")})`
-  );
