@@ -5,6 +5,7 @@ import { store, actionCreators } from './redux';
 import {
   generateRandomGrid,
   generateAwesomeGrid,
+  transformGridToPrologFacts,
   operators,
   items,
   breadthFirstSearch,
@@ -114,6 +115,9 @@ const heuristic3: Node => number = node =>
 const populateInitialGrid: (Array<Cell>) => void = grid =>
   store.dispatch(actionCreators.setGrid(grid));
 
+const populateInitialKnowledgeBase: (Array<string>) => void = facts =>
+  store.dispatch(actionCreators.setKnowledgeBase(facts));
+
 const visualize: (
   Array<StateWithOperator>
 ) => Promise<void> = async retraced => {
@@ -142,6 +146,9 @@ export default () => {
   };
 
   populateInitialGrid(randomlyGeneratedGrid);
+  populateInitialKnowledgeBase(
+    transformGridToPrologFacts(randomlyGeneratedGrid)
+  );
 
   console.log(
     '🔎 Search started!\n0️⃣ Initial state:\n',
