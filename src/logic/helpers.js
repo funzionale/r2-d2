@@ -203,8 +203,8 @@ export const moveR2D2: (Array<Cell>, string) => Array<Cell> = (
 export const sleep: number => Promise<void> = (time: number = 2000) =>
   new Promise(resolve => setTimeout(resolve, time));
 
-// Convert 1D grid to 2D
-export const get1DArrayDimensions: (Array<Cell>) => Dimensions = grid =>
+/** Get m & n of 1D grid */
+export const get1DGridDimensions: (Array<Cell>) => Dimensions = grid =>
   grid.reduce(
     (maxSoFar, cell) => ({
       m: Math.max(maxSoFar.m, cell.coordinates.x + 1),

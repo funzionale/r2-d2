@@ -1,5 +1,5 @@
 import items from '../items';
-import { moveItem, get1DArrayDimensions } from '../helpers';
+import { moveItem, get1DGridDimensions } from '../helpers';
 
 /** moveItem() */
 test('moveItem(): Mobilizes item correctly', () => {
@@ -84,7 +84,12 @@ test('moveItem(): Mobilizes item correctly', () => {
   ]);
 });
 
-test('get1DArrayDimensions from square grid', () => {
+test('get1DGridDimensions(): Trivial case', () => {
+  const grid = [{ coordinates: { x: 0, y: 0 }, items: [] }];
+  expect(get1DGridDimensions(grid)).toEqual({ m: 1, n: 1 });
+});
+
+test('get1DGridDimensions(): Square grid', () => {
   const grid = [
     { coordinates: { x: 0, y: 0 }, items: [] },
     { coordinates: { x: 1, y: 0 }, items: [] },
@@ -96,11 +101,10 @@ test('get1DArrayDimensions from square grid', () => {
     { coordinates: { x: 1, y: 2 }, items: [] },
     { coordinates: { x: 2, y: 2 }, items: [] },
   ];
-
-  expect(get1DArrayDimensions(grid)).toEqual({ m: 3, n: 3 });
+  expect(get1DGridDimensions(grid)).toEqual({ m: 3, n: 3 });
 });
 
-test('get1DArrayDimensions from rectangular grid', () => {
+test('get1DGridDimensions(): Rectangular grid', () => {
   const grid = [
     { coordinates: { x: 0, y: 0 }, items: [] },
     { coordinates: { x: 1, y: 0 }, items: [] },
@@ -109,12 +113,5 @@ test('get1DArrayDimensions from rectangular grid', () => {
     { coordinates: { x: 1, y: 1 }, items: [] },
     { coordinates: { x: 2, y: 1 }, items: [] },
   ];
-
-  expect(get1DArrayDimensions(grid)).toEqual({ m: 3, n: 2 });
-});
-
-test('get1DArrayDimensions trivial case (what does life even mean?!) ', () => {
-  const grid = [{ coordinates: { x: 0, y: 0 }, items: [] }];
-
-  expect(get1DArrayDimensions(grid)).toEqual({ m: 1, n: 1 });
+  expect(get1DGridDimensions(grid)).toEqual({ m: 3, n: 2 });
 });

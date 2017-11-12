@@ -4,12 +4,13 @@ import _ from 'lodash';
 import { store, actionCreators } from './redux';
 import {
   generateRandomGrid,
+  generateAwesomeGrid,
   operators,
   items,
   breadthFirstSearch,
   depthFirstSearch,
   uniformCostSearch,
-  deepIterativeSearch,
+  iterativeDeepeningSearch,
   greedySearch,
   aStarSearch,
   retrace,
@@ -19,7 +20,6 @@ import {
   moveR2D2,
   isTeleportalActivated,
   sleep,
-  generateAwesomeGrid,
 } from './logic';
 
 import type {
@@ -81,8 +81,8 @@ const goalTest: State => boolean = state => {
 const pathCost: (Array<Operator | null>) => number = operators =>
   operators.reduce((accumulator, operator) => accumulator + operator.cost, 0);
 
-/** block distance to teleportal */
-export const heuristic1: Node => number = node => {
+/** Block distance to teleportal */
+const heuristic1: Node => number = node => {
   const state = node.state;
   const r2d2Cell: Cell | void = findCellByItem(state.grid, items.R2D2);
   const teleportalCell: Cell | void = findCellByItem(
@@ -98,15 +98,15 @@ export const heuristic1: Node => number = node => {
   return 0;
 };
 
-/** block distance to teleportal + rocks numberleft*/
-export const heuristic2: Node => number = node =>
+/** Block distance to teleportal + rocks left */
+const heuristic2: Node => number = node =>
   heuristic1(node) +
   filterCellsByItem(node.state.grid, items.PAD).filter(
     cell => !doesCellContainItem(cell, items.ROCK)
   ).length;
 
-/** rocks numberleft*/
-export const heuristic3: Node => number = node =>
+/** Rocks left */
+const heuristic3: Node => number = node =>
   filterCellsByItem(node.state.grid, items.PAD).filter(
     cell => !doesCellContainItem(cell, items.ROCK)
   ).length;
@@ -114,7 +114,7 @@ export const heuristic3: Node => number = node =>
 const populateInitialGrid: (Array<Cell>) => void = grid =>
   store.dispatch(actionCreators.setGrid(grid));
 
-const visualizeFunc: (
+const visualize: (
   Array<StateWithOperator>
 ) => Promise<void> = async retraced => {
   for (let i = 0; i < retraced.length; i++) {
@@ -144,22 +144,21 @@ export default () => {
   populateInitialGrid(randomlyGeneratedGrid);
 
   console.log(
-    '🔎 Search started\n0️⃣ Initial state:\n',
+    '🔎 Search started!\n0️⃣ Initial state:\n',
     JSON.stringify(problem.initialState, null, 2)
   );
 
   const goalNode: Node | null = breadthFirstSearch(problem);
   // const goalNode: Node | null = uniformCostSearch(problem);
   // const goalNode: Node | null = depthFirstSearch(problem);
-  // const goalNode: Node | null = deepIterativeSearch(problem, 30);
+  // const goalNode: Node | null = iterativeDeepeningSearch(problem, 30);
   // const goalNode: Node | null = greedySearch(problem, heuristic1);
   // const goalNode: Node | null = aStarSearch(problem, heuristic1);
   console.log('🔎 Search ended!');
 
   if (goalNode) {
     const retraced: Array<StateWithOperator> = retrace(goalNode);
-    // console.log('✅ A solution was found!\n', JSON.stringify(retraced));
-    visualizeFunc(retraced);
+    visualize(retraced);
   } else {
     console.log(
       '⛔ A solution for this problem using the specified queueing function cannot be found.'

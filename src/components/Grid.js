@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { get1DArrayDimensions } from '../logic';
+import { get1DGridDimensions } from '../logic';
 import type { Cell, Item } from '../flow';
 
 const Pad = () => <img className="pad" src="./pad.svg" alt="Pad" />;
@@ -14,7 +14,7 @@ const Obstacle = () => <img className="wall" src="./wall.svg" alt="Wall" />;
 const R2D2 = () => <img className="r2d2" src="./R2D2.svg" alt="Robot" />;
 
 const Grid = ({ grid }: { grid: Array<Cell> }) => {
-  const { m, n } = get1DArrayDimensions(grid);
+  const { m, n } = get1DGridDimensions(grid);
   const width = Math.floor(100 / m);
   const height = Math.floor(100 / n);
   return grid.map(gridCell => [

@@ -75,8 +75,8 @@ export const uniformCostSearch: Problem => Node | null = problem =>
 const orderedInsert: QueueingFunction = (oldNodes, newNodes) =>
   _.sortBy(oldNodes.concat(newNodes), 'pathCost');
 
-/** Deepening-iterative search */
-export const deepIterativeSearch: (Problem, number) => Node | null = (
+/** Iterative deepening search */
+export const iterativeDeepeningSearch: (Problem, number) => Node | null = (
   problem,
   maxLevel
 ) => {
@@ -119,6 +119,7 @@ const aStarInsert: Heuristic => QueueingFunction = heuristic => (
 ) =>
   _.sortBy(oldNodes.concat(newNodes), node => heuristic(node) + node.pathCost);
 
+/** General search */
 const generalSearch: (Problem, QueueingFunction) => Node | null = (
   problem,
   queueingFunction
@@ -127,18 +128,16 @@ const generalSearch: (Problem, QueueingFunction) => Node | null = (
   let history: Array<State> = [];
   let expansionsCount: number = 0;
   while (!_.isEmpty(nodes)) {
-    /** Guard against infinite loops */
-    if (expansionsCount === 10000) {
+    if (
+      /** Guard against infinite loops */
+      expansionsCount === 10000
+    ) {
       console.log('♻️ Infinite loop!');
       break;
     }
     expansionsCount++;
     const [node] = _.pullAt(nodes, 0);
     if (goalTest(problem)(state(node))) {
-      console.log(
-        'Number of expanded nodes (last iteration if ID search) --> ',
-        expansionsCount
-      );
       return node;
     }
     const expandedNodes = expand(node, problem, history);
