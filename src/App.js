@@ -5,6 +5,7 @@ import { store, actionCreators } from './redux';
 import {
   generateRandomGrid,
   generateAwesomeGrid,
+  generateSucceedingGrid,
   transformGridToPrologFacts,
   operators,
   items,
@@ -21,6 +22,7 @@ import {
   moveR2D2,
   isTeleportalActivated,
   sleep,
+  get1DGridDimensions,
 } from './logic';
 
 import type {
@@ -134,8 +136,10 @@ const visualize: (
 };
 
 export default () => {
-  const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
-  // const randomlyGeneratedGrid: Array<Cell> = generateAwesomeGrid();
+  // const randomlyGeneratedGrid: Array<Cell> = generateRandomGrid();
+  const randomlyGeneratedGrid: Array<Cell> = generateSucceedingGrid();
+
+  console.log('DIMENSIONS =>', get1DGridDimensions(randomlyGeneratedGrid));
 
   const initialState: State = {
     grid: randomlyGeneratedGrid,
@@ -155,8 +159,8 @@ export default () => {
     transformGridToPrologFacts(randomlyGeneratedGrid)
   );
 
-  console.log(transformGridToPrologFacts(randomlyGeneratedGrid));
-  console.log(queryKnowledgeBase('cell(0, 0, X)'));
+  console.log(transformGridToPrologFacts(randomlyGeneratedGrid).join('\n'));
+  // console.log(queryKnowledgeBase('cell(0, 0, X)'));
 
   return;
 
