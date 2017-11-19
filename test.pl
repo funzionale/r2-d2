@@ -7,7 +7,7 @@
 % 3) The definition of obstacle, pad and teleportal have only 2 arguments since these
 % are static items that don't depend on any situation
 % 4) `teleportal`'s definition is redunant here and was put only for clarity
-% 5) `\+var(X), \+var(Y)` is a hacky solution for X and Y being unbound 
+% 5) `nonvar(X), nonvar(Y)` is a hacky solution for X and Y being unbound 
 % at the last iteration of the rock axiom, try to remove them, see the error and fix it :D
 % 6) Ana keda edetko l 3elm l tentef3o beeh abtedy Unity ana ba2a :D
 
@@ -26,7 +26,7 @@ teleportal(0, 2).
 % pad(2, 2).
 % r2d2(2, 0, s0).
 % teleportal(0, 2).
-% call_with_depth_limit((r2d2(0,0,S), rock(2,2,S)), 6, R).
+% call_with_depth_limit((r2d2(0,2,S), rock(2,2,S)), 6, R).
 
 % This doesn't halt :/ 
 % grid(3,3).
@@ -103,8 +103,8 @@ r2d2(X, Y, do(A, S)):-
   grid(M, N), 
   % This is the hacky solution that Nourhan added, 
   % try to get rid of it and see if you can fix the error
-  \+var(X),
-  \+var(Y),
+  nonvar(X),
+  nonvar(Y),
    (
      (
       A = north,
