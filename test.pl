@@ -131,6 +131,8 @@ r2d2(X, Y, do(A, S)):-
        (
         % Next position has an obstacle
         (X1 is X - 1, obstacle(X1, Y)); 
+        % Next position has a rock
+        (X1 is X - 1, rock(X1, Y, S)); 
         % The agent was not in the cell underneath the rock
         (XA is X + 1, \+(r2d2(XA, Y, S))); 
         % The rock was already at the edge of the grid
@@ -142,6 +144,7 @@ r2d2(X, Y, do(A, S)):-
        \+(A = south); 
        (
         (X1 is X + 1, obstacle(X1, Y)); 
+        (X1 is X + 1, rock(X1, Y, S)); 
         (XA is X - 1, \+(r2d2(XA, Y, S))); 
         X is M - 1;
         rock(X1, Y, S)
@@ -151,6 +154,7 @@ r2d2(X, Y, do(A, S)):-
        \+(A = west); 
        (
         (Y1 is Y - 1, obstacle(X, Y1)); 
+        (Y1 is Y - 1, rock(X, Y1, S)); 
         (YA is Y + 1, \+(r2d2(X, YA, S)));
         Y = 0;
         rock(X, Y1, S)
@@ -160,6 +164,7 @@ r2d2(X, Y, do(A, S)):-
        \+(A = east); 
        (
         (Y1 is Y + 1, obstacle(X, Y1)); 
+        (Y1 is Y + 1, rock(X, Y1, S)); 
         (YA is Y - 1, \+(r2d2(X, YA, S))); 
         Y is N - 1;
         rock(X, Y1, S)
