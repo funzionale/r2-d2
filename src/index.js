@@ -1,8 +1,24 @@
-import React from 'react';
+/** @flow */
+
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { store } from './redux';
+import { Grid } from './components';
+import runApp from './App';
+
+class App extends Component<void> {
+  componentDidMount() {
+    runApp();
+  }
+
+  render() {
+    return (
+      <Provider store={store}>
+        <Grid />
+      </Provider>
+    );
+  }
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
